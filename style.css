@@ -1,13 +1,119 @@
+* { box-sizing: border-box; }
+
 body {
   margin: 0;
-  background-color: #0a0e1a;
+  font-family: system-ui, sans-serif;
+  background-color: #f7f5f2;
+  color: #2a2a2a;
+  padding: 20px 30px 60px;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 16px;
+  margin-bottom: 30px;
+}
+
+.budget-setting input {
+  padding: 6px 10px;
+  font-size: 14px;
+  width: 100px;
+}
+
+.search-section input {
+  width: 100%;
+  padding: 10px 14px;
+  font-size: 15px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  margin-bottom: 16px;
+}
+
+.watch-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  min-height: 40px;
+}
+
+.watch-card {
+  background: white;
+  border: 1px solid #e2e2e2;
+  border-radius: 8px;
+  padding: 12px;
+  width: 160px;
+}
+
+.watch-card h4 {
+  margin: 0 0 4px;
+  font-size: 14px;
+}
+
+.watch-card p {
+  margin: 0 0 8px;
+  font-size: 13px;
+  color: #666;
+}
+
+.watch-card button {
+  font-size: 12px;
+  padding: 4px 8px;
+  margin-right: 4px;
+  cursor: pointer;
+}
+
+.lists-section {
+  display: flex;
+  gap: 40px;
+  margin-top: 30px;
+}
+
+.list-column {
+  flex: 1;
+}
+
+/* The interrupt overlay */
+.overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(20, 15, 10, 0.92);
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 100vh;
-  overflow: hidden;
+  z-index: 100;
 }
 
-canvas {
-  display: block;
+.overlay.hidden {
+  display: none;
+}
+
+.overlay-content {
+  max-width: 480px;
+  text-align: center;
+  color: #f5f0e8;
+  padding: 30px;
+}
+
+.overlay-content p {
+  font-size: 20px;
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+
+.overlay-content button {
+  padding: 10px 24px;
+  font-size: 14px;
+  background: none;
+  border: 1px solid #f5f0e8;
+  color: #f5f0e8;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.overlay-content button:hover {
+  background: #f5f0e8;
+  color: #14100a;
 }

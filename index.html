@@ -15,6 +15,27 @@
       </div>
     </header>
 
+    <!-- V, the companion -->
+    <section id="companionPanel" class="companion-panel">
+      <div id="vFace" class="v-face">V</div>
+      <p id="vMessage">Hey, I'm V. Set a budget and start browsing.</p>
+    </section>
+
+    <!-- Active commitment / savings plan -->
+    <section id="commitmentPanel" class="commitment-panel hidden">
+      <h3>Saving for: <span id="commitWatchName"></span></h3>
+      <p>Saved <span id="commitSaved">$0</span> of <span id="commitTotal">$0</span></p>
+      <div class="progress-bar"><div id="commitProgressFill" class="progress-fill"></div></div>
+      <button id="depositBtn">Deposit today's $<span id="dailyAmountLabel"></span></button>
+      <p id="commitStatusMsg" class="status-msg"></p>
+      <button id="giveUpBtn" class="hidden">It's okay — let this one go</button>
+    </section>
+
+    <!-- Blocked state -->
+    <section id="lockedNotice" class="locked-notice hidden">
+      <p>Yo... chill. It's fun but there's limits. Pick one watch from your Want List below to start saving toward — that's the only way to unlock adding more.</p>
+    </section>
+
     <section class="search-section">
       <input type="text" id="searchInput" placeholder="Search a watch (brand or model)...">
       <div id="searchResults" class="watch-grid"></div>
@@ -31,12 +52,22 @@
       </div>
     </section>
 
-    <!-- The interrupt overlay — hidden until the want list exceeds budget -->
-    <div id="interruptOverlay" class="overlay hidden">
+    <!-- Deposit setup modal -->
+    <div id="setupOverlay" class="overlay hidden">
       <div class="overlay-content">
-        <p id="interruptQuote"></p>
-        <button id="dismissBtn">Okay, fair.</button>
+        <p id="setupWatchName"></p>
+        <label for="dailyDepositInput">How much can you deposit per day?</label>
+        <input type="number" id="dailyDepositInput" placeholder="e.g. 10">
+        <p id="setupDaysEstimate"></p>
+        <button id="confirmCommitBtn">Start saving</button>
+        <button id="cancelSetupBtn">Cancel</button>
       </div>
+    </div>
+
+    <!-- Dev-only testing control -->
+    <div class="dev-controls">
+      <button id="nextDayBtn">Simulate Next Day (testing only)</button>
+      <span id="dayCounterLabel"></span>
     </div>
 
     <script src="main.js"></script>

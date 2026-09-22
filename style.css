@@ -14,7 +14,7 @@ header {
   align-items: center;
   border-bottom: 1px solid #ddd;
   padding-bottom: 16px;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
 }
 
 .budget-setting input {
@@ -23,6 +23,91 @@ header {
   width: 100px;
 }
 
+/* --- Companion --- */
+.companion-panel {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: #ece7ff;
+  border-radius: 10px;
+  padding: 16px 20px;
+  margin-bottom: 20px;
+}
+
+.v-face {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #6c5ce7;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  flex-shrink: 0;
+  transition: background 0.4s;
+}
+
+.v-face.happy { background: #4bb87a; }
+.v-face.sad { background: #b85c4b; }
+.v-face.thinking { background: #999; }
+
+#vMessage {
+  margin: 0;
+  font-size: 14px;
+}
+
+/* --- Commitment panel --- */
+.commitment-panel {
+  background: white;
+  border: 1px solid #e2e2e2;
+  border-radius: 10px;
+  padding: 16px 20px;
+  margin-bottom: 20px;
+}
+
+.commitment-panel.hidden,
+.locked-notice.hidden,
+.overlay.hidden,
+.hidden {
+  display: none;
+}
+
+.progress-bar {
+  background: #eee;
+  border-radius: 6px;
+  height: 10px;
+  margin: 10px 0;
+  overflow: hidden;
+}
+
+.progress-fill {
+  background: #4bb87a;
+  height: 100%;
+  width: 0%;
+  transition: width 0.3s;
+}
+
+.status-msg {
+  font-size: 13px;
+  color: #a05a3a;
+}
+
+/* --- Locked notice --- */
+.locked-notice {
+  background: #ffe9e5;
+  border: 1px solid #f5b8ab;
+  border-radius: 10px;
+  padding: 14px 18px;
+  margin-bottom: 20px;
+}
+
+.locked-notice p {
+  margin: 0;
+  font-size: 14px;
+}
+
+/* --- Search + lists (unchanged from before) --- */
 .search-section input {
   width: 100%;
   padding: 10px 14px;
@@ -47,73 +132,67 @@ header {
   width: 160px;
 }
 
-.watch-card h4 {
-  margin: 0 0 4px;
-  font-size: 14px;
-}
-
-.watch-card p {
-  margin: 0 0 8px;
-  font-size: 13px;
-  color: #666;
-}
-
+.watch-card h4 { margin: 0 0 4px; font-size: 14px; }
+.watch-card p { margin: 0 0 8px; font-size: 13px; color: #666; }
 .watch-card button {
   font-size: 12px;
   padding: 4px 8px;
   margin-right: 4px;
+  margin-top: 4px;
   cursor: pointer;
+}
+
+.watch-card button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
 }
 
 .lists-section {
   display: flex;
   gap: 40px;
-  margin-top: 30px;
+  margin-top: 10px;
 }
 
-.list-column {
-  flex: 1;
-}
+.list-column { flex: 1; }
 
-/* The interrupt overlay */
+/* --- Overlay (deposit setup modal) --- */
 .overlay {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(20, 15, 10, 0.92);
+  background: rgba(20, 15, 10, 0.85);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 100;
 }
 
-.overlay.hidden {
-  display: none;
-}
-
 .overlay-content {
-  max-width: 480px;
+  background: white;
+  max-width: 380px;
+  width: 90%;
+  padding: 24px;
+  border-radius: 10px;
   text-align: center;
-  color: #f5f0e8;
-  padding: 30px;
 }
 
-.overlay-content p {
-  font-size: 20px;
-  line-height: 1.6;
-  margin-bottom: 24px;
+.overlay-content input {
+  width: 100%;
+  padding: 8px;
+  margin: 10px 0;
+  font-size: 14px;
 }
 
 .overlay-content button {
-  padding: 10px 24px;
-  font-size: 14px;
-  background: none;
-  border: 1px solid #f5f0e8;
-  color: #f5f0e8;
-  border-radius: 6px;
+  padding: 8px 16px;
+  margin: 6px 4px 0;
   cursor: pointer;
 }
 
-.overlay-content button:hover {
-  background: #f5f0e8;
-  color: #14100a;
+/* --- Dev controls --- */
+.dev-controls {
+  margin-top: 40px;
+  padding-top: 16px;
+  border-top: 1px dashed #ccc;
+  font-size: 12px;
+  color: #999;
 }

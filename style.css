@@ -187,6 +187,10 @@ body {
   z-index: 100;
 }
 
+.overlay.hidden {
+  display: none;
+}
+
 .overlay-content {
   background: white;
   max-width: 380px;

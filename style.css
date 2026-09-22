@@ -5,23 +5,72 @@ body {
   font-family: system-ui, sans-serif;
   background-color: #f7f5f2;
   color: #2a2a2a;
-  padding: 20px 30px 60px;
 }
 
-header {
+.app-layout {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid #ddd;
-  padding-bottom: 16px;
+  min-height: 100vh;
+}
+
+/* --- Sidebar --- */
+.sidebar {
+  width: 220px;
+  background: #1f1b2e;
+  color: #e8e4f5;
+  padding: 24px 0;
+  flex-shrink: 0;
+}
+
+.sidebar-title {
+  padding: 0 20px 20px;
+  margin: 0 0 10px;
+  font-size: 18px;
+  border-bottom: 1px solid #3a3453;
+}
+
+.nav-btn {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  color: #cfc9e8;
+  padding: 12px 20px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.nav-btn:hover { background: #2c2645; }
+
+.nav-btn.active {
+  background: #6c5ce7;
+  color: white;
+  font-weight: 500;
+}
+
+/* --- Main content --- */
+.content {
+  flex: 1;
+  padding: 30px 40px 60px;
+  max-width: 900px;
+}
+
+.page.hidden-page { display: none; }
+
+.page h1 {
+  font-size: 20px;
   margin-bottom: 20px;
 }
 
-.budget-setting input {
-  padding: 6px 10px;
-  font-size: 14px;
-  width: 100px;
+.page-subtext {
+  font-size: 13px;
+  color: #888;
+  margin-top: -12px;
+  margin-bottom: 20px;
 }
+
+.budget-setting { margin-bottom: 20px; }
+.budget-setting input { padding: 6px 10px; font-size: 14px; width: 100px; }
 
 /* --- Companion --- */
 .companion-panel {
@@ -35,14 +84,11 @@ header {
 }
 
 .v-face {
-  width: 48px;
-  height: 48px;
+  width: 48px; height: 48px;
   border-radius: 50%;
   background: #6c5ce7;
   color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: flex; align-items: center; justify-content: center;
   font-weight: bold;
   flex-shrink: 0;
   transition: background 0.4s;
@@ -52,10 +98,7 @@ header {
 .v-face.sad { background: #b85c4b; }
 .v-face.thinking { background: #999; }
 
-#vMessage {
-  margin: 0;
-  font-size: 14px;
-}
+#vMessage { margin: 0; font-size: 14px; }
 
 /* --- Commitment panel --- */
 .commitment-panel {
@@ -66,12 +109,7 @@ header {
   margin-bottom: 20px;
 }
 
-.commitment-panel.hidden,
-.locked-notice.hidden,
-.overlay.hidden,
-.hidden {
-  display: none;
-}
+.hidden { display: none; }
 
 .progress-bar {
   background: #eee;
@@ -88,12 +126,8 @@ header {
   transition: width 0.3s;
 }
 
-.status-msg {
-  font-size: 13px;
-  color: #a05a3a;
-}
+.status-msg { font-size: 13px; color: #a05a3a; }
 
-/* --- Locked notice --- */
 .locked-notice {
   background: #ffe9e5;
   border: 1px solid #f5b8ab;
@@ -102,13 +136,10 @@ header {
   margin-bottom: 20px;
 }
 
-.locked-notice p {
-  margin: 0;
-  font-size: 14px;
-}
+.locked-notice p { margin: 0; font-size: 14px; }
 
-/* --- Search + lists (unchanged from before) --- */
-.search-section input {
+/* --- Search + grids --- */
+#searchInput {
   width: 100%;
   padding: 10px 14px;
   font-size: 15px;
@@ -121,7 +152,6 @@ header {
   display: flex;
   flex-wrap: wrap;
   gap: 14px;
-  min-height: 40px;
 }
 
 .watch-card {
@@ -129,11 +159,13 @@ header {
   border: 1px solid #e2e2e2;
   border-radius: 8px;
   padding: 12px;
-  width: 160px;
+  width: 170px;
 }
 
-.watch-card h4 { margin: 0 0 4px; font-size: 14px; }
+.watch-card h4 { margin: 0 0 2px; font-size: 14px; }
+.watch-card .brand-tag { font-size: 11px; color: #999; margin: 0 0 4px; }
 .watch-card p { margin: 0 0 8px; font-size: 13px; color: #666; }
+
 .watch-card button {
   font-size: 12px;
   padding: 4px 8px;
@@ -142,18 +174,7 @@ header {
   cursor: pointer;
 }
 
-.watch-card button:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-}
-
-.lists-section {
-  display: flex;
-  gap: 40px;
-  margin-top: 10px;
-}
-
-.list-column { flex: 1; }
+.watch-card button:disabled { opacity: 0.4; cursor: not-allowed; }
 
 /* --- Overlay (deposit setup modal) --- */
 .overlay {
@@ -175,22 +196,11 @@ header {
   text-align: center;
 }
 
-.overlay-content input {
-  width: 100%;
-  padding: 8px;
-  margin: 10px 0;
-  font-size: 14px;
-}
+.overlay-content input { width: 100%; padding: 8px; margin: 10px 0; font-size: 14px; }
+.overlay-content button { padding: 8px 16px; margin: 6px 4px 0; cursor: pointer; }
 
-.overlay-content button {
-  padding: 8px 16px;
-  margin: 6px 4px 0;
-  cursor: pointer;
-}
-
-/* --- Dev controls --- */
 .dev-controls {
-  margin-top: 40px;
+  margin-top: 30px;
   padding-top: 16px;
   border-top: 1px dashed #ccc;
   font-size: 12px;

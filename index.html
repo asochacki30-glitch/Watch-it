@@ -7,52 +7,84 @@
   </head>
   <body>
 
-    <header>
-      <h1>Watch-it</h1>
-      <div class="budget-setting">
-        <label for="budgetInput">Your budget: $</label>
-        <input type="number" id="budgetInput" placeholder="e.g. 2000">
-      </div>
-    </header>
+    <div class="app-layout">
 
-    <!-- V, the companion -->
-    <section id="companionPanel" class="companion-panel">
-      <div id="vFace" class="v-face">V</div>
-      <p id="vMessage">Hey, I'm V. Set a budget and start browsing.</p>
-    </section>
+      <!-- Sidebar -->
+      <nav class="sidebar">
+        <h2 class="sidebar-title">Watch-it</h2>
+        <button class="nav-btn active" data-page="controlPanel">Control Panel</button>
+        <button class="nav-btn" data-page="watchSearch">Watch Search</button>
+        <button class="nav-btn" data-page="wishlist">Wishlist</button>
+        <button class="nav-btn" data-page="watchLog">Watch Log</button>
+        <button class="nav-btn" data-page="dailyRecs">Daily Recommendations</button>
+      </nav>
 
-    <!-- Active commitment / savings plan -->
-    <section id="commitmentPanel" class="commitment-panel hidden">
-      <h3>Saving for: <span id="commitWatchName"></span></h3>
-      <p>Saved <span id="commitSaved">$0</span> of <span id="commitTotal">$0</span></p>
-      <div class="progress-bar"><div id="commitProgressFill" class="progress-fill"></div></div>
-      <button id="depositBtn">Deposit today's $<span id="dailyAmountLabel"></span></button>
-      <p id="commitStatusMsg" class="status-msg"></p>
-      <button id="giveUpBtn" class="hidden">It's okay — let this one go</button>
-    </section>
+      <!-- Main content area -->
+      <main class="content">
 
-    <!-- Blocked state -->
-    <section id="lockedNotice" class="locked-notice hidden">
-      <p>Yo... chill. It's fun but there's limits. Pick one watch from your Want List below to start saving toward — that's the only way to unlock adding more.</p>
-    </section>
+        <!-- PAGE: Control Panel -->
+        <section id="page-controlPanel" class="page">
+          <h1>Control Panel</h1>
 
-    <section class="search-section">
-      <input type="text" id="searchInput" placeholder="Search a watch (brand or model)...">
-      <div id="searchResults" class="watch-grid"></div>
-    </section>
+          <div class="budget-setting">
+            <label for="budgetInput">Your budget: $</label>
+            <input type="number" id="budgetInput" placeholder="e.g. 2000">
+          </div>
 
-    <section class="lists-section">
-      <div class="list-column">
-        <h2>Want List — <span id="wantTotal">$0</span></h2>
-        <div id="wantList" class="watch-grid"></div>
-      </div>
-      <div class="list-column">
-        <h2>Have List</h2>
-        <div id="haveList" class="watch-grid"></div>
-      </div>
-    </section>
+          <section id="companionPanel" class="companion-panel">
+            <div id="vFace" class="v-face">V</div>
+            <p id="vMessage">Hey, I'm V. Set a budget and start browsing.</p>
+          </section>
 
-    <!-- Deposit setup modal -->
+          <section id="commitmentPanel" class="commitment-panel hidden">
+            <h3>Saving for: <span id="commitWatchName"></span></h3>
+            <p>Saved <span id="commitSaved">$0</span> of <span id="commitTotal">$0</span></p>
+            <div class="progress-bar"><div id="commitProgressFill" class="progress-fill"></div></div>
+            <button id="depositBtn">Deposit today's $<span id="dailyAmountLabel"></span></button>
+            <p id="commitStatusMsg" class="status-msg"></p>
+            <button id="giveUpBtn" class="hidden">It's okay — let this one go</button>
+          </section>
+
+          <section id="lockedNotice" class="locked-notice hidden">
+            <p>Yo... chill. It's fun but there's limits. Pick one watch from your Wishlist to start saving toward — that's the only way to unlock adding more.</p>
+          </section>
+
+          <div class="dev-controls">
+            <button id="nextDayBtn">Simulate Next Day (testing only)</button>
+            <span id="dayCounterLabel"></span>
+          </div>
+        </section>
+
+        <!-- PAGE: Watch Search -->
+        <section id="page-watchSearch" class="page hidden-page">
+          <h1>Watch Search</h1>
+          <input type="text" id="searchInput" placeholder="Search a watch (brand or model)...">
+          <div id="searchResults" class="watch-grid"></div>
+        </section>
+
+        <!-- PAGE: Wishlist -->
+        <section id="page-wishlist" class="page hidden-page">
+          <h1>Wishlist — <span id="wantTotal">$0</span></h1>
+          <div id="wantList" class="watch-grid"></div>
+        </section>
+
+        <!-- PAGE: Watch Log -->
+        <section id="page-watchLog" class="page hidden-page">
+          <h1>Watch Log</h1>
+          <div id="haveList" class="watch-grid"></div>
+        </section>
+
+        <!-- PAGE: Daily Recommendations -->
+        <section id="page-dailyRecs" class="page hidden-page">
+          <h1>Daily Recommendations</h1>
+          <p class="page-subtext">A small feed, on purpose — 3 to 5 watches, not an endless scroll.</p>
+          <div id="dailyRecsGrid" class="watch-grid"></div>
+        </section>
+
+      </main>
+    </div>
+
+    <!-- Deposit setup modal (overlays everything, regardless of page) -->
     <div id="setupOverlay" class="overlay hidden">
       <div class="overlay-content">
         <p id="setupWatchName"></p>
@@ -62,12 +94,6 @@
         <button id="confirmCommitBtn">Start saving</button>
         <button id="cancelSetupBtn">Cancel</button>
       </div>
-    </div>
-
-    <!-- Dev-only testing control -->
-    <div class="dev-controls">
-      <button id="nextDayBtn">Simulate Next Day (testing only)</button>
-      <span id="dayCounterLabel"></span>
     </div>
 
     <script src="main.js"></script>

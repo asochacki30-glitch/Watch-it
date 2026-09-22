@@ -43,52 +43,59 @@ function renderSearch(query) {
 searchInput.addEventListener("input", (e) => renderSearch(e.target.value));
 
 // ==============================
-// Watch database — many brands, mainstream and microbrand,
-// a wide price range from budget to high-end
+// Watch database — 30+ real brands, budget through luxury.
+// "Price" is a realistic current MSRP range, not a live scraped
+// figure. "url" points to each brand's real official watches page.
 // ==============================
 
 const sampleWatches = [
-  // Budget / everyday
-  { id: 1, brand: "Casio", model: "G-Shock DW5600", price: 60 },
-  { id: 2, brand: "Casio", model: "Duro Diver", price: 55 },
-  { id: 3, brand: "Casio", model: "Edifice EQB", price: 180 },
-  { id: 4, brand: "Timex", model: "Weekender", price: 45 },
-  { id: 5, brand: "Timex", model: "Marlin Automatic", price: 230 },
-  { id: 6, brand: "Orient", model: "Bambino", price: 150 },
-  { id: 7, brand: "Orient", model: "Kamasu", price: 220 },
-  { id: 8, brand: "Seiko", model: "SKX007", price: 250 },
-  { id: 9, brand: "Seiko", model: "5 Sports SNK", price: 100 },
-  { id: 10, brand: "Seiko", model: "Alpinist", price: 500 },
+  // --- Budget / everyday ---
+  { id: 1, brand: "Casio", model: "G-Shock DW5600", price: 60, url: "https://www.casio.com/us/watches/gshock/" },
+  { id: 2, brand: "Casio", model: "Edifice EQB", price: 180, url: "https://www.casio.com/us/watches/edifice/" },
+  { id: 3, brand: "Timex", model: "Weekender", price: 45, url: "https://www.timex.com/" },
+  { id: 4, brand: "Timex", model: "Marlin Automatic", price: 230, url: "https://www.timex.com/" },
+  { id: 5, brand: "Orient", model: "Bambino", price: 150, url: "https://www.orientwatchusa.com/" },
+  { id: 6, brand: "Orient", model: "Kamasu", price: 220, url: "https://www.orientwatchusa.com/" },
+  { id: 7, brand: "Seiko", model: "5 Sports SNK", price: 100, url: "https://www.seikousa.com/" },
+  { id: 8, brand: "Seiko", model: "SKX-style Prospex", price: 300, url: "https://www.seikousa.com/" },
+  { id: 9, brand: "Citizen", model: "Eco-Drive Chandler", price: 200, url: "https://www.citizenwatch.com/" },
+  { id: 10, brand: "Bulova", model: "Marine Star", price: 300, url: "https://www.bulova.com/" },
+  { id: 11, brand: "Fossil", model: "Grant Chronograph", price: 155, url: "https://www.fossil.com/" },
+  { id: 12, brand: "Nixon", model: "51-30", price: 350, url: "https://www.nixon.com/" },
+  { id: 13, brand: "Invicta", model: "Pro Diver", price: 90, url: "https://www.invictawatch.com/" },
 
-  // Budget dive-watch microbrands
-  { id: 11, brand: "WatchDives", model: "WD SUB Homage", price: 130 },
-  { id: 12, brand: "Steeldive", model: "SD1953", price: 90 },
-  { id: 13, brand: "San Martin", model: "SN0121 Diver", price: 220 },
-  { id: 14, brand: "Islander", model: "Automatic Diver", price: 210 },
+  // --- Budget dive-watch microbrands ---
+  { id: 14, brand: "WatchDives", model: "WD Sub Homage", price: 130, url: "https://www.watchdives.com/" },
+  { id: 15, brand: "San Martin", model: "SN0121 Diver", price: 220, url: "https://sanmartinwatch.com/" },
+  { id: 16, brand: "Islander", model: "Automatic Diver", price: 210, url: "https://www.islanderwatches.com/" },
 
-  // Mid-range microbrands / enthusiast favorites
-  { id: 15, brand: "Baltic", model: "Aquascaphe", price: 650 },
-  { id: 16, brand: "Traska", model: "Freediver", price: 700 },
-  { id: 17, brand: "Halios", model: "Seaforth", price: 750 },
-  { id: 18, brand: "Boldr", model: "Odyssey Diver", price: 400 },
-  { id: 19, brand: "Monta", model: "Oceanking", price: 2200 },
-  { id: 20, brand: "Christopher Ward", model: "C60 Trident", price: 900 },
-  { id: 21, brand: "Nodus", model: "Retrospect", price: 600 },
-  { id: 22, brand: "Formex", model: "Essence Leggera", price: 1600 },
-  { id: 23, brand: "Lorier", model: "Neptune", price: 550 },
-  { id: 24, brand: "Kurono Tokyo", model: "Anemone", price: 3800 },
+  // --- Mid-range microbrands / enthusiast favorites ---
+  { id: 17, brand: "Baltic", model: "Aquascaphe", price: 650, url: "https://baltic-watches.com/" },
+  { id: 18, brand: "Traska", model: "Freediver", price: 700, url: "https://www.traskawatches.com/" },
+  { id: 19, brand: "Halios", model: "Seaforth", price: 750, url: "https://www.halioswatches.com/" },
+  { id: 20, brand: "Boldr", model: "Odyssey Diver", price: 400, url: "https://boldrsupply.co/" },
+  { id: 21, brand: "Vaer", model: "D5 Field Diver", price: 300, url: "https://vaerwatches.com/" },
+  { id: 22, brand: "Nodus", model: "Retrospect", price: 600, url: "https://nodusgroup.com/" },
+  { id: 23, brand: "Lorier", model: "Neptune", price: 550, url: "https://lorierwatch.com/" },
+  { id: 24, brand: "Monta", model: "Oceanking", price: 2200, url: "https://montawatch.com/" },
+  { id: 25, brand: "Formex", model: "Essence Leggera", price: 1600, url: "https://www.formexwatch.com/" },
+  { id: 26, brand: "Christopher Ward", model: "C60 Trident", price: 900, url: "https://www.christopherward.com/" },
+  { id: 27, brand: "Kurono Tokyo", model: "Anemone", price: 3800, url: "https://www.kuronotokyo.com/" },
 
-  // Established / higher-end brands
-  { id: 25, brand: "Grand Seiko", model: "SBGA211", price: 5800 },
-  { id: 26, brand: "Tudor", model: "Black Bay 58", price: 3900 },
-  { id: 27, brand: "Tudor", model: "Pelagos", price: 4500 },
-  { id: 28, brand: "Omega", model: "Speedmaster", price: 6500 },
-  { id: 29, brand: "Omega", model: "Seamaster", price: 5200 },
-  { id: 30, brand: "Zenith", model: "Chronomaster", price: 8900 },
-  { id: 31, brand: "IWC", model: "Mark XX", price: 7300 },
-  { id: 32, brand: "Cartier", model: "Tank Must", price: 3200 },
-  { id: 33, brand: "Rolex", model: "Submariner", price: 10500 },
-  { id: 34, brand: "Rolex", model: "Datejust", price: 9200 },
+  // --- Established Swiss / higher-end ---
+  { id: 28, brand: "Tissot", model: "PRX Powermatic 80", price: 495, url: "https://www.tissotwatches.com/" },
+  { id: 29, brand: "Hamilton", model: "Khaki Field", price: 595, url: "https://www.hamiltonwatch.com/" },
+  { id: 30, brand: "Longines", model: "Spirit", price: 2400, url: "https://www.longines.com/" },
+  { id: 31, brand: "Grand Seiko", model: "SBGA211 Snowflake", price: 5800, url: "https://www.grand-seiko.com/us-en" },
+  { id: 32, brand: "Tudor", model: "Black Bay 58", price: 3900, url: "https://www.tudorwatch.com/" },
+  { id: 33, brand: "Omega", model: "Speedmaster Professional", price: 6500, url: "https://www.omegawatches.com/" },
+  { id: 34, brand: "Zenith", model: "Chronomaster", price: 8900, url: "https://www.zenith-watches.com/" },
+  { id: 35, brand: "IWC", model: "Mark XX", price: 7300, url: "https://www.iwc.com/" },
+  { id: 36, brand: "Cartier", model: "Tank Must", price: 3200, url: "https://www.cartier.com/" },
+  { id: 37, brand: "Breitling", model: "Navitimer", price: 8900, url: "https://www.breitling.com/" },
+  { id: 38, brand: "TAG Heuer", model: "Carrera", price: 5300, url: "https://www.tagheuer.com/" },
+  { id: 39, brand: "Rolex", model: "Submariner", price: 10500, url: "https://www.rolex.com/" },
+  { id: 40, brand: "Rolex", model: "Datejust", price: 9200, url: "https://www.rolex.com/" },
 ];
 
 // ==============================
@@ -190,13 +197,29 @@ function vThinkThenSay(state, message, delayMs = 3000) {
 // Rendering
 // ==============================
 
+// Deterministic-but-varied color per brand, so icons are visually
+// distinct without needing any real photos
+function colorForBrand(brand) {
+  const palette = ["#6c5ce7", "#4bb87a", "#e0894f", "#3a8fb7", "#b85c8a", "#a05a3a", "#5c8ab8"];
+  let hash = 0;
+  for (let i = 0; i < brand.length; i++) hash += brand.charCodeAt(i);
+  return palette[hash % palette.length];
+}
+
 function renderWatchCard(watch, listType) {
   const card = document.createElement("div");
   card.className = "watch-card";
+
+  const color = colorForBrand(watch.brand);
+
   card.innerHTML = `
+    <div class="watch-icon" style="background:${color}">
+      <div class="watch-icon-face"></div>
+    </div>
     <p class="brand-tag">${watch.brand}</p>
     <h4>${watch.model}</h4>
     <p>$${watch.price.toLocaleString()}</p>
+    <a class="learn-more" href="${watch.url}" target="_blank" rel="noopener">Learn more &rarr;</a>
   `;
 
   if (listType === "search") {
@@ -218,7 +241,7 @@ function renderWatchCard(watch, listType) {
 
     const isThisCommitted = commitment && commitment.watch.id === watch.id;
     const commitBtn = document.createElement("button");
-    commitBtn.textContent = isThisCommitted ? "Saving for this" : "Commit & save toward this";
+    commitBtn.textContent = isThisCommitted ? "Saving for this" : "Start Saving";
     commitBtn.disabled = isThisCommitted || (commitment && !isThisCommitted);
     commitBtn.onclick = () => openSetupModal(watch);
     card.appendChild(commitBtn);

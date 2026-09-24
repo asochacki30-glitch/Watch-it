@@ -15,8 +15,7 @@ navButtons.forEach((btn) => {
 });
 
 // ==============================
-// Brand data — used ONLY for Discover (names + links) and Daily
-// Recommendations. Wishlist/Watch Log entries are typed in by hand.
+// Brand data (Discover directory + Daily Recs)
 // ==============================
 
 const brands = [
@@ -65,8 +64,6 @@ const brands = [
   { name: "Rolex", url: "https://www.rolex.com/" },
 ];
 
-// Suggested watches for the Daily Recommendations feed (brand + a
-// representative model/price, so it's still useful as a feed)
 const sampleWatches = [
   { id: 1, brand: "Casio", model: "G-Shock DW5600", price: 60 },
   { id: 2, brand: "Seiko", model: "5 Sports SNK", price: 100 },
@@ -81,7 +78,7 @@ const sampleWatches = [
 ];
 
 // ==============================
-// Render Discover — literally just names
+// Discover directory
 // ==============================
 
 const brandDirectory = document.getElementById("brandDirectory");
@@ -109,6 +106,8 @@ let budget = Number(localStorage.getItem("budget")) || 0;
 let commitment = JSON.parse(localStorage.getItem("commitment")) || null;
 let currentDay = Number(localStorage.getItem("currentDay")) || 0;
 let nextId = Number(localStorage.getItem("nextId")) || 1000;
+let wearLog = JSON.parse(localStorage.getItem("wearLog")) || [];
+let soldList = JSON.parse(localStorage.getItem("soldList")) || [];
 
 // ==============================
 // Element references
@@ -148,12 +147,20 @@ const dailyRecsGrid = document.getElementById("dailyRecsGrid");
 const wantBrandInput = document.getElementById("wantBrandInput");
 const wantModelInput = document.getElementById("wantModelInput");
 const wantPriceInput = document.getElementById("wantPriceInput");
+const wantLinkInput = document.getElementById("wantLinkInput");
 const addWantBtn = document.getElementById("addWantBtn");
 
 const haveBrandInput = document.getElementById("haveBrandInput");
 const haveModelInput = document.getElementById("haveModelInput");
 const havePriceInput = document.getElementById("havePriceInput");
+const haveLinkInput = document.getElementById("haveLinkInput");
 const addHaveBtn = document.getElementById("addHaveBtn");
+
+const wearSelect = document.getElementById("wearSelect");
+const logWearBtn = document.getElementById("logWearBtn");
+const wearLogStatus = document.getElementById("wearLogStatus");
+const wearHistory = document.getElementById("wearHistory");
+const soldListEl = document.getElementById("soldList");
 
 budgetInput.value = budget || "";
 
@@ -170,6 +177,8 @@ function saveState() {
   localStorage.setItem("commitment", JSON.stringify(commitment));
   localStorage.setItem("currentDay", currentDay);
   localStorage.setItem("nextId", nextId);
+  localStorage.setItem("wearLog", JSON.stringify(wearLog));
+  localStorage.setItem("soldList", JSON.stringify(soldList));
 }
 
 // ==============================
@@ -217,6 +226,7 @@ function renderWatchCard(watch, listType) {
     <p class="brand-tag">${watch.brand}</p>
     <h4>${watch.model}</h4>
     <p>$${watch.price.toLocaleString()}</p>
+    ${watch.link ? `<a class="learn-more" href="${watch.link}" target="_blank" rel="noopener">View link &rarr;</a>` : ""}
   `;
 
   if (listType === "search") {
@@ -247,6 +257,11 @@ function renderWatchCard(watch, listType) {
     removeBtn.textContent = "Remove";
     removeBtn.onclick = () => removeFromList(watch.id, "have");
     card.appendChild(removeBtn);
+
+    const letGoBtn = document.createElement("button");
+    letGoBtn.textContent = "Let go";
+    letGoBtn.onclick = () => letGoOfWatch(watch);
+    card.appendChild(letGoBtn);
   }
 
   return card;
@@ -265,11 +280,10 @@ function renderLists() {
   lockedNotice.classList.toggle("hidden", !isLocked());
   renderCommitmentPanel();
   renderDailyRecs();
+  renderWearSection();
+  renderSoldList();
 
   dayCounterLabel.textContent = `Day ${currentDay}`;
-
-  // Keep the add-to-wishlist form disabled while locked, same rule
-  // as the +Want buttons elsewhere
   addWantBtn.disabled = isLocked();
 }
 
@@ -313,6 +327,42 @@ function renderDailyRecs() {
   picks.forEach((watch) => dailyRecsGrid.appendChild(renderWatchCard(watch, "search")));
 }
 
+function renderWearSection() {
+  wearSelect.innerHTML = "";
+  haveList.forEach((watch) => {
+    const option = document.createElement("option");
+    option.value = watch.id;
+    option.textContent = `${watch.brand} ${watch.model}`;
+    wearSelect.appendChild(option);
+  });
+
+  const todayEntry = wearLog.find((w) => w.day === currentDay);
+  wearLogStatus.textContent = todayEntry
+    ? `Logged today: ${todayEntry.brand} ${todayEntry.model}`
+    : "Nothing logged yet today.";
+
+  wearHistory.innerHTML = "";
+  [...wearLog].reverse().slice(0, 10).forEach((entry) => {
+    const line = document.createElement("p");
+    line.textContent = `Day ${entry.day}: ${entry.brand} ${entry.model}`;
+    wearHistory.appendChild(line);
+  });
+}
+
+function renderSoldList() {
+  soldListEl.innerHTML = "";
+  soldList.forEach((watch) => {
+    const card = document.createElement("div");
+    card.className = "watch-card";
+    card.innerHTML = `
+      <p class="brand-tag">${watch.brand}</p>
+      <h4>${watch.model}</h4>
+      <p>${watch.note || "No note left."}</p>
+    `;
+    soldListEl.appendChild(card);
+  });
+}
+
 // ==============================
 // List management
 // ==============================
@@ -339,37 +389,60 @@ function removeFromList(id, listType) {
   renderLists();
 }
 
+function letGoOfWatch(watch) {
+  const note = prompt("Any note on why you're letting this one go? (optional)") || "";
+  haveList = haveList.filter((w) => w.id !== watch.id);
+  soldList.push({ ...watch, note, dateLetGo: currentDay });
+  saveState();
+  renderLists();
+}
+
 // ==============================
-// Manual "add a watch" forms (Wishlist / Watch Log)
+// Manual add-watch forms
 // ==============================
 
 addWantBtn.addEventListener("click", () => {
   const brand = wantBrandInput.value.trim();
   const model = wantModelInput.value.trim();
   const price = Number(wantPriceInput.value);
+  const link = wantLinkInput.value.trim();
 
   if (!brand || !model || !price || price <= 0) return;
   if (isLocked()) return;
 
-  addWatchToList({ id: nextId++, brand, model, price }, "want");
+  addWatchToList({ id: nextId++, brand, model, price, link }, "want");
 
   wantBrandInput.value = "";
   wantModelInput.value = "";
   wantPriceInput.value = "";
+  wantLinkInput.value = "";
 });
 
 addHaveBtn.addEventListener("click", () => {
   const brand = haveBrandInput.value.trim();
   const model = haveModelInput.value.trim();
   const price = Number(havePriceInput.value) || 0;
+  const link = haveLinkInput.value.trim();
 
   if (!brand || !model) return;
 
-  addWatchToList({ id: nextId++, brand, model, price }, "have");
+  addWatchToList({ id: nextId++, brand, model, price, link }, "have");
 
   haveBrandInput.value = "";
   haveModelInput.value = "";
   havePriceInput.value = "";
+  haveLinkInput.value = "";
+});
+
+logWearBtn.addEventListener("click", () => {
+  const selectedId = Number(wearSelect.value);
+  const watch = haveList.find((w) => w.id === selectedId);
+  if (!watch) return;
+
+  wearLog = wearLog.filter((w) => w.day !== currentDay);
+  wearLog.push({ day: currentDay, watchId: watch.id, brand: watch.brand, model: watch.model });
+  saveState();
+  renderWearSection();
 });
 
 // ==============================

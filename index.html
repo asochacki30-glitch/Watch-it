@@ -53,7 +53,7 @@
           </div>
         </section>
 
-        <!-- PAGE: Discover — just names, nothing else -->
+        <!-- PAGE: Discover — just names -->
         <section id="page-watchSearch" class="page hidden-page">
           <h1>Discover</h1>
           <p class="page-subtext">Click a brand to visit their site.</p>
@@ -68,6 +68,7 @@
             <input type="text" id="wantBrandInput" placeholder="Brand">
             <input type="text" id="wantModelInput" placeholder="Model">
             <input type="number" id="wantPriceInput" placeholder="Price ($)">
+            <input type="text" id="wantLinkInput" placeholder="Link (optional)">
             <button id="addWantBtn">Add to Wishlist</button>
           </div>
 
@@ -82,10 +83,22 @@
             <input type="text" id="haveBrandInput" placeholder="Brand">
             <input type="text" id="haveModelInput" placeholder="Model">
             <input type="number" id="havePriceInput" placeholder="Price ($)">
+            <input type="text" id="haveLinkInput" placeholder="Link (optional)">
             <button id="addHaveBtn">Add to Watch Log</button>
           </div>
 
           <div id="haveList" class="watch-grid"></div>
+
+          <h3 class="section-subhead">Today's Wear</h3>
+          <div class="wear-log-form">
+            <select id="wearSelect"></select>
+            <button id="logWearBtn">Log Today's Watch</button>
+          </div>
+          <p id="wearLogStatus" class="status-msg"></p>
+          <div id="wearHistory" class="wear-history"></div>
+
+          <h3 class="section-subhead">Let Go</h3>
+          <div id="soldList" class="watch-grid"></div>
         </section>
 
         <!-- PAGE: Daily Recommendations -->

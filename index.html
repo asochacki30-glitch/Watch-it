@@ -9,7 +9,6 @@
 
     <div class="app-layout">
 
-      <!-- Sidebar -->
       <nav class="sidebar">
         <h2 class="sidebar-title">Watch-it</h2>
         <button class="nav-btn active" data-page="controlPanel">Control Panel</button>
@@ -19,7 +18,6 @@
         <button class="nav-btn" data-page="dailyRecs">Daily Recommendations</button>
       </nav>
 
-      <!-- Main content area -->
       <main class="content">
 
         <!-- PAGE: Control Panel -->
@@ -55,23 +53,38 @@
           </div>
         </section>
 
-        <!-- PAGE: Discover -->
+        <!-- PAGE: Discover — just names, nothing else -->
         <section id="page-watchSearch" class="page hidden-page">
           <h1>Discover</h1>
-          <p class="page-subtext">Browse brands — type below only if you're looking for something specific.</p>
-          <input type="text" id="searchInput" placeholder="Filter by brand or model (optional)...">
-          <div id="searchResults" class="watch-grid"></div>
+          <p class="page-subtext">Click a brand to visit their site.</p>
+          <div id="brandDirectory" class="brand-directory"></div>
         </section>
 
         <!-- PAGE: Wishlist -->
         <section id="page-wishlist" class="page hidden-page">
           <h1>Wishlist — <span id="wantTotal">$0</span></h1>
+
+          <div class="add-watch-form">
+            <input type="text" id="wantBrandInput" placeholder="Brand">
+            <input type="text" id="wantModelInput" placeholder="Model">
+            <input type="number" id="wantPriceInput" placeholder="Price ($)">
+            <button id="addWantBtn">Add to Wishlist</button>
+          </div>
+
           <div id="wantList" class="watch-grid"></div>
         </section>
 
         <!-- PAGE: Watch Log -->
         <section id="page-watchLog" class="page hidden-page">
           <h1>Watch Log</h1>
+
+          <div class="add-watch-form">
+            <input type="text" id="haveBrandInput" placeholder="Brand">
+            <input type="text" id="haveModelInput" placeholder="Model">
+            <input type="number" id="havePriceInput" placeholder="Price ($)">
+            <button id="addHaveBtn">Add to Watch Log</button>
+          </div>
+
           <div id="haveList" class="watch-grid"></div>
         </section>
 
@@ -85,7 +98,6 @@
       </main>
     </div>
 
-    <!-- Deposit setup modal -->
     <div id="setupOverlay" class="overlay hidden">
       <div class="overlay-content">
         <p id="setupWatchName"></p>

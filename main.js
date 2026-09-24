@@ -15,78 +15,89 @@ navButtons.forEach((btn) => {
 });
 
 // ==============================
-// Discover / filter
+// Brand data — used ONLY for Discover (names + links) and Daily
+// Recommendations. Wishlist/Watch Log entries are typed in by hand.
 // ==============================
 
-const searchInput = document.getElementById("searchInput");
-const searchResults = document.getElementById("searchResults");
-
-function renderSearch(query) {
-  searchResults.innerHTML = "";
-  const list = !query
-    ? sampleWatches
-    : sampleWatches.filter((w) =>
-        `${w.brand} ${w.model}`.toLowerCase().includes(query.toLowerCase())
-      );
-  list.forEach((watch) => searchResults.appendChild(renderWatchCard(watch, "search")));
-}
-
-searchInput.addEventListener("input", (e) => renderSearch(e.target.value));
-
-// ==============================
-// Watch database
-// ==============================
-
-const sampleWatches = [
-  { id: 1, brand: "Casio", model: "G-Shock DW5600", price: 60, url: "https://www.casio.com/us/watches/gshock/" },
-  { id: 2, brand: "Casio", model: "Edifice EQB", price: 180, url: "https://www.casio.com/us/watches/edifice/" },
-  { id: 3, brand: "Timex", model: "Weekender", price: 45, url: "https://www.timex.com/" },
-  { id: 4, brand: "Timex", model: "Marlin Automatic", price: 230, url: "https://www.timex.com/" },
-  { id: 5, brand: "Orient", model: "Bambino", price: 150, url: "https://www.orientwatchusa.com/" },
-  { id: 6, brand: "Orient", model: "Kamasu", price: 220, url: "https://www.orientwatchusa.com/" },
-  { id: 7, brand: "Seiko", model: "5 Sports SNK", price: 100, url: "https://www.seikousa.com/" },
-  { id: 8, brand: "Seiko", model: "SKX-style Prospex", price: 300, url: "https://www.seikousa.com/" },
-  { id: 9, brand: "Citizen", model: "Eco-Drive Chandler", price: 200, url: "https://www.citizenwatch.com/" },
-  { id: 10, brand: "Bulova", model: "Marine Star", price: 300, url: "https://www.bulova.com/" },
-  { id: 11, brand: "Fossil", model: "Grant Chronograph", price: 155, url: "https://www.fossil.com/" },
-  { id: 12, brand: "Nixon", model: "51-30", price: 350, url: "https://www.nixon.com/" },
-  { id: 13, brand: "Invicta", model: "Pro Diver", price: 90, url: "https://www.invictawatch.com/" },
-  { id: 14, brand: "WatchDives", model: "WD1967 Diver", price: 160, url: "https://www.watchdives.com/" },
-  { id: 15, brand: "San Martin", model: "SN0121 Diver", price: 220, url: "https://sanmartinwatch.com/" },
-  { id: 16, brand: "Islander", model: "Automatic Diver", price: 210, url: "https://www.islanderwatches.com/" },
-  { id: 41, brand: "Maen", model: "Hudson", price: 795, url: "https://maenwatches.com/" },
-  { id: 42, brand: "Farer", model: "Aqua Compressor", price: 1450, url: "https://www.farer.com/" },
-  { id: 43, brand: "Yema", model: "Superman Heritage", price: 750, url: "https://www.yema.com/" },
-  { id: 44, brand: "Autodromo", model: "Group B", price: 895, url: "https://www.autodromo.com/" },
-  { id: 45, brand: "Doxa", model: "Sub 200", price: 1590, url: "https://www.doxawatches.com/" },
-  { id: 46, brand: "Undone", model: "Basecamp", price: 420, url: "https://www.undone.com/" },
-  { id: 47, brand: "Marathon", model: "GSAR Quartz", price: 750, url: "https://www.marathonwatch.com/" },
-  { id: 48, brand: "Zelos", model: "Mako", price: 550, url: "https://www.zelos-watches.com/" },
-  { id: 17, brand: "Baltic", model: "Aquascaphe", price: 650, url: "https://baltic-watches.com/" },
-  { id: 18, brand: "Traska", model: "Freediver", price: 700, url: "https://www.traskawatches.com/" },
-  { id: 19, brand: "Halios", model: "Seaforth", price: 750, url: "https://www.halioswatches.com/" },
-  { id: 20, brand: "Boldr", model: "Odyssey Diver", price: 400, url: "https://boldrsupply.co/" },
-  { id: 21, brand: "Vaer", model: "D5 Field Diver", price: 300, url: "https://vaerwatches.com/" },
-  { id: 22, brand: "Nodus", model: "Retrospect", price: 600, url: "https://nodusgroup.com/" },
-  { id: 23, brand: "Lorier", model: "Neptune", price: 550, url: "https://lorierwatch.com/" },
-  { id: 24, brand: "Monta", model: "Oceanking", price: 2200, url: "https://montawatch.com/" },
-  { id: 25, brand: "Formex", model: "Essence Leggera", price: 1600, url: "https://www.formexwatch.com/" },
-  { id: 26, brand: "Christopher Ward", model: "C60 Trident", price: 900, url: "https://www.christopherward.com/" },
-  { id: 27, brand: "Kurono Tokyo", model: "Anemone", price: 3800, url: "https://www.kuronotokyo.com/" },
-  { id: 28, brand: "Tissot", model: "PRX Powermatic 80", price: 495, url: "https://www.tissotwatches.com/" },
-  { id: 29, brand: "Hamilton", model: "Khaki Field", price: 595, url: "https://www.hamiltonwatch.com/" },
-  { id: 30, brand: "Longines", model: "Spirit", price: 2400, url: "https://www.longines.com/" },
-  { id: 31, brand: "Grand Seiko", model: "SBGA211 Snowflake", price: 5800, url: "https://www.grand-seiko.com/us-en" },
-  { id: 32, brand: "Tudor", model: "Black Bay 58", price: 3900, url: "https://www.tudorwatch.com/" },
-  { id: 33, brand: "Omega", model: "Speedmaster Professional", price: 6500, url: "https://www.omegawatches.com/" },
-  { id: 34, brand: "Zenith", model: "Chronomaster", price: 8900, url: "https://www.zenith-watches.com/" },
-  { id: 35, brand: "IWC", model: "Mark XX", price: 7300, url: "https://www.iwc.com/" },
-  { id: 36, brand: "Cartier", model: "Tank Must", price: 3200, url: "https://www.cartier.com/" },
-  { id: 37, brand: "Breitling", model: "Navitimer", price: 8900, url: "https://www.breitling.com/" },
-  { id: 38, brand: "TAG Heuer", model: "Carrera", price: 5300, url: "https://www.tagheuer.com/" },
-  { id: 39, brand: "Rolex", model: "Submariner", price: 10500, url: "https://www.rolex.com/" },
-  { id: 40, brand: "Rolex", model: "Datejust", price: 9200, url: "https://www.rolex.com/" },
+const brands = [
+  { name: "Casio", url: "https://www.casio.com/us/watches/gshock/" },
+  { name: "Timex", url: "https://www.timex.com/" },
+  { name: "Orient", url: "https://www.orientwatchusa.com/" },
+  { name: "Seiko", url: "https://www.seikousa.com/" },
+  { name: "Citizen", url: "https://www.citizenwatch.com/" },
+  { name: "Bulova", url: "https://www.bulova.com/" },
+  { name: "Fossil", url: "https://www.fossil.com/" },
+  { name: "Nixon", url: "https://www.nixon.com/" },
+  { name: "Invicta", url: "https://www.invictawatch.com/" },
+  { name: "WatchDives", url: "https://www.watchdives.com/" },
+  { name: "San Martin", url: "https://sanmartinwatch.com/" },
+  { name: "Islander", url: "https://www.islanderwatches.com/" },
+  { name: "Maen", url: "https://maenwatches.com/" },
+  { name: "Farer", url: "https://www.farer.com/" },
+  { name: "Yema", url: "https://www.yema.com/" },
+  { name: "Autodromo", url: "https://www.autodromo.com/" },
+  { name: "Doxa", url: "https://www.doxawatches.com/" },
+  { name: "Undone", url: "https://www.undone.com/" },
+  { name: "Marathon", url: "https://www.marathonwatch.com/" },
+  { name: "Zelos", url: "https://www.zelos-watches.com/" },
+  { name: "Baltic", url: "https://baltic-watches.com/" },
+  { name: "Traska", url: "https://www.traskawatches.com/" },
+  { name: "Halios", url: "https://www.halioswatches.com/" },
+  { name: "Boldr", url: "https://boldrsupply.co/" },
+  { name: "Vaer", url: "https://vaerwatches.com/" },
+  { name: "Nodus", url: "https://nodusgroup.com/" },
+  { name: "Lorier", url: "https://lorierwatch.com/" },
+  { name: "Monta", url: "https://montawatch.com/" },
+  { name: "Formex", url: "https://www.formexwatch.com/" },
+  { name: "Christopher Ward", url: "https://www.christopherward.com/" },
+  { name: "Kurono Tokyo", url: "https://www.kuronotokyo.com/" },
+  { name: "Tissot", url: "https://www.tissotwatches.com/" },
+  { name: "Hamilton", url: "https://www.hamiltonwatch.com/" },
+  { name: "Longines", url: "https://www.longines.com/" },
+  { name: "Grand Seiko", url: "https://www.grand-seiko.com/us-en" },
+  { name: "Tudor", url: "https://www.tudorwatch.com/" },
+  { name: "Omega", url: "https://www.omegawatches.com/" },
+  { name: "Zenith", url: "https://www.zenith-watches.com/" },
+  { name: "IWC", url: "https://www.iwc.com/" },
+  { name: "Cartier", url: "https://www.cartier.com/" },
+  { name: "Breitling", url: "https://www.breitling.com/" },
+  { name: "TAG Heuer", url: "https://www.tagheuer.com/" },
+  { name: "Rolex", url: "https://www.rolex.com/" },
 ];
+
+// Suggested watches for the Daily Recommendations feed (brand + a
+// representative model/price, so it's still useful as a feed)
+const sampleWatches = [
+  { id: 1, brand: "Casio", model: "G-Shock DW5600", price: 60 },
+  { id: 2, brand: "Seiko", model: "5 Sports SNK", price: 100 },
+  { id: 3, brand: "Orient", model: "Bambino", price: 150 },
+  { id: 4, brand: "Maen", model: "Hudson", price: 795 },
+  { id: 5, brand: "Baltic", model: "Aquascaphe", price: 650 },
+  { id: 6, brand: "Doxa", model: "Sub 200", price: 1590 },
+  { id: 7, brand: "Tudor", model: "Black Bay 58", price: 3900 },
+  { id: 8, brand: "Rolex", model: "Submariner", price: 10500 },
+  { id: 9, brand: "Christopher Ward", model: "C60 Trident", price: 900 },
+  { id: 10, brand: "Marathon", model: "GSAR Quartz", price: 750 },
+];
+
+// ==============================
+// Render Discover — literally just names
+// ==============================
+
+const brandDirectory = document.getElementById("brandDirectory");
+
+function renderBrandDirectory() {
+  brandDirectory.innerHTML = "";
+  brands.forEach((brand) => {
+    const link = document.createElement("a");
+    link.className = "brand-name-link";
+    link.href = brand.url;
+    link.target = "_blank";
+    link.rel = "noopener";
+    link.textContent = brand.name;
+    brandDirectory.appendChild(link);
+  });
+}
 
 // ==============================
 // State
@@ -97,6 +108,7 @@ let haveList = JSON.parse(localStorage.getItem("haveList")) || [];
 let budget = Number(localStorage.getItem("budget")) || 0;
 let commitment = JSON.parse(localStorage.getItem("commitment")) || null;
 let currentDay = Number(localStorage.getItem("currentDay")) || 0;
+let nextId = Number(localStorage.getItem("nextId")) || 1000;
 
 // ==============================
 // Element references
@@ -133,6 +145,16 @@ const dayCounterLabel = document.getElementById("dayCounterLabel");
 
 const dailyRecsGrid = document.getElementById("dailyRecsGrid");
 
+const wantBrandInput = document.getElementById("wantBrandInput");
+const wantModelInput = document.getElementById("wantModelInput");
+const wantPriceInput = document.getElementById("wantPriceInput");
+const addWantBtn = document.getElementById("addWantBtn");
+
+const haveBrandInput = document.getElementById("haveBrandInput");
+const haveModelInput = document.getElementById("haveModelInput");
+const havePriceInput = document.getElementById("havePriceInput");
+const addHaveBtn = document.getElementById("addHaveBtn");
+
 budgetInput.value = budget || "";
 
 let watchBeingCommitted = null;
@@ -147,6 +169,7 @@ function saveState() {
   localStorage.setItem("budget", budget);
   localStorage.setItem("commitment", JSON.stringify(commitment));
   localStorage.setItem("currentDay", currentDay);
+  localStorage.setItem("nextId", nextId);
 }
 
 // ==============================
@@ -174,7 +197,7 @@ function setVState(state, message) {
   vMessage.textContent = message;
 }
 
-function vThinkThenSay(state, message, delayMs = 3000) {
+function vThinkThenSay(state, message, delayMs = 1400) {
   setVState("thinking", "V is thinking...");
   depositBtn.disabled = true;
   setTimeout(() => {
@@ -187,32 +210,25 @@ function vThinkThenSay(state, message, delayMs = 3000) {
 // Rendering
 // ==============================
 
-function screenshotUrlFor(pageUrl) {
-  return `https://s.wordpress.com/mshots/v1/${encodeURIComponent(pageUrl)}?w=400&h=300`;
-}
-
 function renderWatchCard(watch, listType) {
   const card = document.createElement("div");
   card.className = "watch-card";
-
   card.innerHTML = `
-    <img class="watch-photo" src="${screenshotUrlFor(watch.url)}" alt="${watch.brand} homepage" loading="lazy">
     <p class="brand-tag">${watch.brand}</p>
     <h4>${watch.model}</h4>
     <p>$${watch.price.toLocaleString()}</p>
-    <a class="learn-more" href="${watch.url}" target="_blank" rel="noopener">Learn more &rarr;</a>
   `;
 
   if (listType === "search") {
     const wantBtn = document.createElement("button");
     wantBtn.textContent = "+ Want";
     wantBtn.disabled = isLocked();
-    wantBtn.onclick = () => addToList(watch, "want");
+    wantBtn.onclick = () => addWatchToList({ ...watch, id: nextId++ }, "want");
     card.appendChild(wantBtn);
 
     const haveBtn = document.createElement("button");
     haveBtn.textContent = "+ Have";
-    haveBtn.onclick = () => addToList(watch, "have");
+    haveBtn.onclick = () => addWatchToList({ ...watch, id: nextId++ }, "have");
     card.appendChild(haveBtn);
   } else if (listType === "want") {
     const removeBtn = document.createElement("button");
@@ -248,10 +264,13 @@ function renderLists() {
 
   lockedNotice.classList.toggle("hidden", !isLocked());
   renderCommitmentPanel();
-  renderSearch(searchInput.value);
   renderDailyRecs();
 
   dayCounterLabel.textContent = `Day ${currentDay}`;
+
+  // Keep the add-to-wishlist form disabled while locked, same rule
+  // as the +Want buttons elsewhere
+  addWantBtn.disabled = isLocked();
 }
 
 function renderCommitmentPanel() {
@@ -298,12 +317,12 @@ function renderDailyRecs() {
 // List management
 // ==============================
 
-function addToList(watch, listType) {
+function addWatchToList(watch, listType) {
   if (listType === "want" && isLocked()) return;
   if (listType === "want") {
-    if (!wantList.find((w) => w.id === watch.id)) wantList.push(watch);
+    wantList.push(watch);
   } else {
-    if (!haveList.find((w) => w.id === watch.id)) haveList.push(watch);
+    haveList.push(watch);
   }
   saveState();
   renderLists();
@@ -319,6 +338,39 @@ function removeFromList(id, listType) {
   saveState();
   renderLists();
 }
+
+// ==============================
+// Manual "add a watch" forms (Wishlist / Watch Log)
+// ==============================
+
+addWantBtn.addEventListener("click", () => {
+  const brand = wantBrandInput.value.trim();
+  const model = wantModelInput.value.trim();
+  const price = Number(wantPriceInput.value);
+
+  if (!brand || !model || !price || price <= 0) return;
+  if (isLocked()) return;
+
+  addWatchToList({ id: nextId++, brand, model, price }, "want");
+
+  wantBrandInput.value = "";
+  wantModelInput.value = "";
+  wantPriceInput.value = "";
+});
+
+addHaveBtn.addEventListener("click", () => {
+  const brand = haveBrandInput.value.trim();
+  const model = haveModelInput.value.trim();
+  const price = Number(havePriceInput.value) || 0;
+
+  if (!brand || !model) return;
+
+  addWatchToList({ id: nextId++, brand, model, price }, "have");
+
+  haveBrandInput.value = "";
+  haveModelInput.value = "";
+  havePriceInput.value = "";
+});
 
 // ==============================
 // Commitment / deposit flow
@@ -380,7 +432,7 @@ depositBtn.addEventListener("click", () => {
     finished
       ? `You did it! ${commitment.watch.brand} ${commitment.watch.model} is yours.`
       : "Nice — that's real progress. See you tomorrow.",
-    3000
+    1400
   );
 
   if (finished) {
@@ -390,14 +442,14 @@ depositBtn.addEventListener("click", () => {
     saveState();
   }
 
-  setTimeout(renderLists, 3100);
+  setTimeout(renderLists, 1500);
 });
 
 giveUpBtn.addEventListener("click", () => {
-  vThinkThenSay("sad", "That's okay. Not every watch is the right one right now. Let's find one that actually fits.", 3000);
+  vThinkThenSay("sad", "That's okay. Not every watch is the right one right now. Let's find one that actually fits.", 1400);
   commitment = null;
   saveState();
-  setTimeout(renderLists, 3100);
+  setTimeout(renderLists, 1500);
 });
 
 // ==============================
@@ -410,15 +462,15 @@ nextDayBtn.addEventListener("click", () => {
   if (commitment) {
     if (!commitment.depositedToday) {
       commitment.missedDays++;
-      vThinkThenSay("sad", "You didn't deposit yesterday. No judgment — just noticing.", 2500);
+      vThinkThenSay("sad", "You didn't deposit yesterday. No judgment — just noticing.", 1200);
     } else {
-      vThinkThenSay("happy", "New day. Ready to keep going?", 2500);
+      vThinkThenSay("happy", "New day. Ready to keep going?", 1200);
     }
     commitment.depositedToday = false;
   }
 
   saveState();
-  setTimeout(renderLists, 2600);
+  setTimeout(renderLists, 1300);
 });
 
 // ==============================
@@ -435,4 +487,5 @@ budgetInput.addEventListener("change", (e) => {
 // Initial render
 // ==============================
 
+renderBrandDirectory();
 renderLists();

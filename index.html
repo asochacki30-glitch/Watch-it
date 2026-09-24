@@ -13,7 +13,7 @@
       <nav class="sidebar">
         <h2 class="sidebar-title">Watch-it</h2>
         <button class="nav-btn active" data-page="controlPanel">Control Panel</button>
-        <button class="nav-btn" data-page="watchSearch">Watch Search</button>
+        <button class="nav-btn" data-page="watchSearch">Discover</button>
         <button class="nav-btn" data-page="wishlist">Wishlist</button>
         <button class="nav-btn" data-page="watchLog">Watch Log</button>
         <button class="nav-btn" data-page="dailyRecs">Daily Recommendations</button>
@@ -55,10 +55,11 @@
           </div>
         </section>
 
-        <!-- PAGE: Watch Search -->
+        <!-- PAGE: Discover -->
         <section id="page-watchSearch" class="page hidden-page">
-          <h1>Watch Search</h1>
-          <input type="text" id="searchInput" placeholder="Search a watch (brand or model)...">
+          <h1>Discover</h1>
+          <p class="page-subtext">Browse brands — type below only if you're looking for something specific.</p>
+          <input type="text" id="searchInput" placeholder="Filter by brand or model (optional)...">
           <div id="searchResults" class="watch-grid"></div>
         </section>
 
@@ -84,7 +85,7 @@
       </main>
     </div>
 
-    <!-- Deposit setup modal (overlays everything, regardless of page) -->
+    <!-- Deposit setup modal -->
     <div id="setupOverlay" class="overlay hidden">
       <div class="overlay-content">
         <p id="setupWatchName"></p>

@@ -1,7 +1,5 @@
 // ==============================
-// Page navigation — wired up FIRST, before anything that could
-// possibly throw an error, so navigation and search never break
-// even if a later feature has a bug.
+// Page navigation
 // ==============================
 
 const navButtons = document.querySelectorAll(".nav-btn");
@@ -10,18 +8,14 @@ const pages = document.querySelectorAll(".page");
 navButtons.forEach((btn) => {
   btn.addEventListener("click", () => {
     const targetId = "page-" + btn.dataset.page;
-
-    pages.forEach((page) => {
-      page.classList.toggle("hidden-page", page.id !== targetId);
-    });
-
+    pages.forEach((page) => page.classList.toggle("hidden-page", page.id !== targetId));
     navButtons.forEach((b) => b.classList.remove("active"));
     btn.classList.add("active");
   });
 });
 
 // ==============================
-// Search — wired up early too, independent of everything below
+// Discover / filter
 // ==============================
 
 const searchInput = document.getElementById("searchInput");
@@ -29,27 +23,21 @@ const searchResults = document.getElementById("searchResults");
 
 function renderSearch(query) {
   searchResults.innerHTML = "";
-  if (!query) return;
-
-  const matches = sampleWatches.filter((w) =>
-    `${w.brand} ${w.model}`.toLowerCase().includes(query.toLowerCase())
-  );
-
-  matches.forEach((watch) => {
-    searchResults.appendChild(renderWatchCard(watch, "search"));
-  });
+  const list = !query
+    ? sampleWatches
+    : sampleWatches.filter((w) =>
+        `${w.brand} ${w.model}`.toLowerCase().includes(query.toLowerCase())
+      );
+  list.forEach((watch) => searchResults.appendChild(renderWatchCard(watch, "search")));
 }
 
 searchInput.addEventListener("input", (e) => renderSearch(e.target.value));
 
 // ==============================
-// Watch database — 30+ real brands, budget through luxury.
-// "Price" is a realistic current MSRP range, not a live scraped
-// figure. "url" points to each brand's real official watches page.
+// Watch database
 // ==============================
 
 const sampleWatches = [
-  // --- Budget / everyday ---
   { id: 1, brand: "Casio", model: "G-Shock DW5600", price: 60, url: "https://www.casio.com/us/watches/gshock/" },
   { id: 2, brand: "Casio", model: "Edifice EQB", price: 180, url: "https://www.casio.com/us/watches/edifice/" },
   { id: 3, brand: "Timex", model: "Weekender", price: 45, url: "https://www.timex.com/" },
@@ -63,13 +51,17 @@ const sampleWatches = [
   { id: 11, brand: "Fossil", model: "Grant Chronograph", price: 155, url: "https://www.fossil.com/" },
   { id: 12, brand: "Nixon", model: "51-30", price: 350, url: "https://www.nixon.com/" },
   { id: 13, brand: "Invicta", model: "Pro Diver", price: 90, url: "https://www.invictawatch.com/" },
-
-  // --- Budget dive-watch microbrands ---
-  { id: 14, brand: "WatchDives", model: "WD Sub Homage", price: 130, url: "https://www.watchdives.com/" },
+  { id: 14, brand: "WatchDives", model: "WD1967 Diver", price: 160, url: "https://www.watchdives.com/" },
   { id: 15, brand: "San Martin", model: "SN0121 Diver", price: 220, url: "https://sanmartinwatch.com/" },
   { id: 16, brand: "Islander", model: "Automatic Diver", price: 210, url: "https://www.islanderwatches.com/" },
-
-  // --- Mid-range microbrands / enthusiast favorites ---
+  { id: 41, brand: "Maen", model: "Hudson", price: 795, url: "https://maenwatches.com/" },
+  { id: 42, brand: "Farer", model: "Aqua Compressor", price: 1450, url: "https://www.farer.com/" },
+  { id: 43, brand: "Yema", model: "Superman Heritage", price: 750, url: "https://www.yema.com/" },
+  { id: 44, brand: "Autodromo", model: "Group B", price: 895, url: "https://www.autodromo.com/" },
+  { id: 45, brand: "Doxa", model: "Sub 200", price: 1590, url: "https://www.doxawatches.com/" },
+  { id: 46, brand: "Undone", model: "Basecamp", price: 420, url: "https://www.undone.com/" },
+  { id: 47, brand: "Marathon", model: "GSAR Quartz", price: 750, url: "https://www.marathonwatch.com/" },
+  { id: 48, brand: "Zelos", model: "Mako", price: 550, url: "https://www.zelos-watches.com/" },
   { id: 17, brand: "Baltic", model: "Aquascaphe", price: 650, url: "https://baltic-watches.com/" },
   { id: 18, brand: "Traska", model: "Freediver", price: 700, url: "https://www.traskawatches.com/" },
   { id: 19, brand: "Halios", model: "Seaforth", price: 750, url: "https://www.halioswatches.com/" },
@@ -81,8 +73,6 @@ const sampleWatches = [
   { id: 25, brand: "Formex", model: "Essence Leggera", price: 1600, url: "https://www.formexwatch.com/" },
   { id: 26, brand: "Christopher Ward", model: "C60 Trident", price: 900, url: "https://www.christopherward.com/" },
   { id: 27, brand: "Kurono Tokyo", model: "Anemone", price: 3800, url: "https://www.kuronotokyo.com/" },
-
-  // --- Established Swiss / higher-end ---
   { id: 28, brand: "Tissot", model: "PRX Powermatic 80", price: 495, url: "https://www.tissotwatches.com/" },
   { id: 29, brand: "Hamilton", model: "Khaki Field", price: 595, url: "https://www.hamiltonwatch.com/" },
   { id: 30, brand: "Longines", model: "Spirit", price: 2400, url: "https://www.longines.com/" },
@@ -197,25 +187,16 @@ function vThinkThenSay(state, message, delayMs = 3000) {
 // Rendering
 // ==============================
 
-// Deterministic-but-varied color per brand, so icons are visually
-// distinct without needing any real photos
-function colorForBrand(brand) {
-  const palette = ["#6c5ce7", "#4bb87a", "#e0894f", "#3a8fb7", "#b85c8a", "#a05a3a", "#5c8ab8"];
-  let hash = 0;
-  for (let i = 0; i < brand.length; i++) hash += brand.charCodeAt(i);
-  return palette[hash % palette.length];
+function screenshotUrlFor(pageUrl) {
+  return `https://s.wordpress.com/mshots/v1/${encodeURIComponent(pageUrl)}?w=400&h=300`;
 }
 
 function renderWatchCard(watch, listType) {
   const card = document.createElement("div");
   card.className = "watch-card";
 
-  const color = colorForBrand(watch.brand);
-
   card.innerHTML = `
-    <div class="watch-icon" style="background:${color}">
-      <div class="watch-icon-face"></div>
-    </div>
+    <img class="watch-photo" src="${screenshotUrlFor(watch.url)}" alt="${watch.brand} homepage" loading="lazy">
     <p class="brand-tag">${watch.brand}</p>
     <h4>${watch.model}</h4>
     <p>$${watch.price.toLocaleString()}</p>
@@ -306,14 +287,11 @@ function renderCommitmentPanel() {
   }
 }
 
-// A small, capped feed — 3 to 5 watches, deliberately not endless
 function renderDailyRecs() {
   dailyRecsGrid.innerHTML = "";
   const shuffled = [...sampleWatches].sort(() => Math.random() - 0.5);
-  const picks = shuffled.slice(0, 3 + Math.floor(Math.random() * 3)); // 3–5
-  picks.forEach((watch) => {
-    dailyRecsGrid.appendChild(renderWatchCard(watch, "search"));
-  });
+  const picks = shuffled.slice(0, 3 + Math.floor(Math.random() * 3));
+  picks.forEach((watch) => dailyRecsGrid.appendChild(renderWatchCard(watch, "search")));
 }
 
 // ==============================
@@ -423,7 +401,7 @@ giveUpBtn.addEventListener("click", () => {
 });
 
 // ==============================
-// Day simulation (testing tool only)
+// Day simulation (testing only)
 // ==============================
 
 nextDayBtn.addEventListener("click", () => {

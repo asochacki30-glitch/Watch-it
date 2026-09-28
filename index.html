@@ -79,12 +79,30 @@
         <section id="page-watchLog" class="page hidden-page">
           <h1>Watch Log</h1>
 
-          <div class="add-watch-form">
-            <input type="text" id="haveBrandInput" placeholder="Brand">
-            <input type="text" id="haveModelInput" placeholder="Model">
-            <input type="number" id="havePriceInput" placeholder="Price ($)">
-            <input type="text" id="haveLinkInput" placeholder="Link (optional)">
-            <button id="addHaveBtn">Add to Watch Log</button>
+          <button id="startLogWatchBtn" class="primary-btn">Log a Watch</button>
+
+          <div id="logWatchForm" class="log-watch-form hidden">
+
+            <div id="logStep1" class="log-step">
+              <input type="text" id="logBrandInput" placeholder="Brand">
+              <input type="text" id="logModelInput" placeholder="Name of the watch">
+              <div class="log-step-actions">
+                <button id="logStep1NextBtn" class="primary-btn">Next</button>
+                <button id="logCancelBtn1" class="secondary-btn">Cancel</button>
+              </div>
+            </div>
+
+            <div id="logStep2" class="log-step hidden">
+              <input type="text" id="logMovementNameInput" placeholder="Movement name">
+              <input type="text" id="logPowerReserveInput" placeholder="Power reserve">
+              <input type="text" id="logAccuracyInput" placeholder="Accuracy">
+              <input type="text" id="logMovementTypeInput" placeholder="Movement type (e.g. Automatic, Quartz)">
+              <div class="log-step-actions">
+                <button id="logBackBtn" class="secondary-btn">Back</button>
+                <button id="logSaveBtn" class="primary-btn">Add to Watch Log</button>
+              </div>
+            </div>
+
           </div>
 
           <div id="haveList" class="watch-grid"></div>
@@ -96,9 +114,6 @@
           </div>
           <p id="wearLogStatus" class="status-msg"></p>
           <div id="wearHistory" class="wear-history"></div>
-
-          <h3 class="section-subhead">Let Go</h3>
-          <div id="soldList" class="watch-grid"></div>
         </section>
 
         <!-- PAGE: Daily Recommendations -->

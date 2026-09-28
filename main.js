@@ -107,7 +107,6 @@ let commitment = JSON.parse(localStorage.getItem("commitment")) || null;
 let currentDay = Number(localStorage.getItem("currentDay")) || 0;
 let nextId = Number(localStorage.getItem("nextId")) || 1000;
 let wearLog = JSON.parse(localStorage.getItem("wearLog")) || [];
-let soldList = JSON.parse(localStorage.getItem("soldList")) || [];
 
 // ==============================
 // Element references
@@ -150,21 +149,31 @@ const wantPriceInput = document.getElementById("wantPriceInput");
 const wantLinkInput = document.getElementById("wantLinkInput");
 const addWantBtn = document.getElementById("addWantBtn");
 
-const haveBrandInput = document.getElementById("haveBrandInput");
-const haveModelInput = document.getElementById("haveModelInput");
-const havePriceInput = document.getElementById("havePriceInput");
-const haveLinkInput = document.getElementById("haveLinkInput");
-const addHaveBtn = document.getElementById("addHaveBtn");
-
 const wearSelect = document.getElementById("wearSelect");
 const logWearBtn = document.getElementById("logWearBtn");
 const wearLogStatus = document.getElementById("wearLogStatus");
 const wearHistory = document.getElementById("wearHistory");
-const soldListEl = document.getElementById("soldList");
+
+// New step-by-step watch logging elements
+const startLogWatchBtn = document.getElementById("startLogWatchBtn");
+const logWatchForm = document.getElementById("logWatchForm");
+const logStep1 = document.getElementById("logStep1");
+const logStep2 = document.getElementById("logStep2");
+const logBrandInput = document.getElementById("logBrandInput");
+const logModelInput = document.getElementById("logModelInput");
+const logStep1NextBtn = document.getElementById("logStep1NextBtn");
+const logCancelBtn1 = document.getElementById("logCancelBtn1");
+const logMovementNameInput = document.getElementById("logMovementNameInput");
+const logPowerReserveInput = document.getElementById("logPowerReserveInput");
+const logAccuracyInput = document.getElementById("logAccuracyInput");
+const logMovementTypeInput = document.getElementById("logMovementTypeInput");
+const logBackBtn = document.getElementById("logBackBtn");
+const logSaveBtn = document.getElementById("logSaveBtn");
 
 budgetInput.value = budget || "";
 
 let watchBeingCommitted = null;
+let pendingLogWatch = {};
 
 // ==============================
 // Saving
@@ -178,7 +187,6 @@ function saveState() {
   localStorage.setItem("currentDay", currentDay);
   localStorage.setItem("nextId", nextId);
   localStorage.setItem("wearLog", JSON.stringify(wearLog));
-  localStorage.setItem("soldList", JSON.stringify(soldList));
 }
 
 // ==============================
@@ -222,12 +230,23 @@ function vThinkThenSay(state, message, delayMs = 1400) {
 function renderWatchCard(watch, listType) {
   const card = document.createElement("div");
   card.className = "watch-card";
-  card.innerHTML = `
-    <p class="brand-tag">${watch.brand}</p>
-    <h4>${watch.model}</h4>
-    <p>$${watch.price.toLocaleString()}</p>
-    ${watch.link ? `<a class="learn-more" href="${watch.link}" target="_blank" rel="noopener">View link &rarr;</a>` : ""}
-  `;
+
+  let detailsHtml = `<p class="brand-tag">${watch.brand}</p><h4>${watch.model}</h4>`;
+
+  if (listType !== "have") {
+    detailsHtml += `<p>$${watch.price.toLocaleString()}</p>`;
+    if (watch.link) {
+      detailsHtml += `<a class="learn-more" href="${watch.link}" target="_blank" rel="noopener">View link &rarr;</a>`;
+    }
+  } else {
+    if (watch.price) detailsHtml += `<p>$${watch.price.toLocaleString()}</p>`;
+    if (watch.movementType) detailsHtml += `<p class="detail-line">Type: ${watch.movementType}</p>`;
+    if (watch.movementName) detailsHtml += `<p class="detail-line">Movement: ${watch.movementName}</p>`;
+    if (watch.powerReserve) detailsHtml += `<p class="detail-line">Power reserve: ${watch.powerReserve}</p>`;
+    if (watch.accuracy) detailsHtml += `<p class="detail-line">Accuracy: ${watch.accuracy}</p>`;
+  }
+
+  card.innerHTML = detailsHtml;
 
   if (listType === "search") {
     const wantBtn = document.createElement("button");
@@ -257,11 +276,6 @@ function renderWatchCard(watch, listType) {
     removeBtn.textContent = "Remove";
     removeBtn.onclick = () => removeFromList(watch.id, "have");
     card.appendChild(removeBtn);
-
-    const letGoBtn = document.createElement("button");
-    letGoBtn.textContent = "Let go";
-    letGoBtn.onclick = () => letGoOfWatch(watch);
-    card.appendChild(letGoBtn);
   }
 
   return card;
@@ -281,7 +295,6 @@ function renderLists() {
   renderCommitmentPanel();
   renderDailyRecs();
   renderWearSection();
-  renderSoldList();
 
   dayCounterLabel.textContent = `Day ${currentDay}`;
   addWantBtn.disabled = isLocked();
@@ -349,20 +362,6 @@ function renderWearSection() {
   });
 }
 
-function renderSoldList() {
-  soldListEl.innerHTML = "";
-  soldList.forEach((watch) => {
-    const card = document.createElement("div");
-    card.className = "watch-card";
-    card.innerHTML = `
-      <p class="brand-tag">${watch.brand}</p>
-      <h4>${watch.model}</h4>
-      <p>${watch.note || "No note left."}</p>
-    `;
-    soldListEl.appendChild(card);
-  });
-}
-
 // ==============================
 // List management
 // ==============================
@@ -389,16 +388,8 @@ function removeFromList(id, listType) {
   renderLists();
 }
 
-function letGoOfWatch(watch) {
-  const note = prompt("Any note on why you're letting this one go? (optional)") || "";
-  haveList = haveList.filter((w) => w.id !== watch.id);
-  soldList.push({ ...watch, note, dateLetGo: currentDay });
-  saveState();
-  renderLists();
-}
-
 // ==============================
-// Manual add-watch forms
+// Wishlist add form
 // ==============================
 
 addWantBtn.addEventListener("click", () => {
@@ -418,21 +409,67 @@ addWantBtn.addEventListener("click", () => {
   wantLinkInput.value = "";
 });
 
-addHaveBtn.addEventListener("click", () => {
-  const brand = haveBrandInput.value.trim();
-  const model = haveModelInput.value.trim();
-  const price = Number(havePriceInput.value) || 0;
-  const link = haveLinkInput.value.trim();
+// ==============================
+// Watch Log — step-by-step logging flow
+// ==============================
 
+function resetLogForm() {
+  logBrandInput.value = "";
+  logModelInput.value = "";
+  logMovementNameInput.value = "";
+  logPowerReserveInput.value = "";
+  logAccuracyInput.value = "";
+  logMovementTypeInput.value = "";
+  pendingLogWatch = {};
+  logStep1.classList.remove("hidden");
+  logStep2.classList.add("hidden");
+}
+
+startLogWatchBtn.addEventListener("click", () => {
+  resetLogForm();
+  logWatchForm.classList.remove("hidden");
+});
+
+logCancelBtn1.addEventListener("click", () => {
+  logWatchForm.classList.add("hidden");
+  resetLogForm();
+});
+
+logStep1NextBtn.addEventListener("click", () => {
+  const brand = logBrandInput.value.trim();
+  const model = logModelInput.value.trim();
   if (!brand || !model) return;
 
-  addWatchToList({ id: nextId++, brand, model, price, link }, "have");
-
-  haveBrandInput.value = "";
-  haveModelInput.value = "";
-  havePriceInput.value = "";
-  haveLinkInput.value = "";
+  pendingLogWatch = { brand, model };
+  logStep1.classList.add("hidden");
+  logStep2.classList.remove("hidden");
 });
+
+logBackBtn.addEventListener("click", () => {
+  logStep2.classList.add("hidden");
+  logStep1.classList.remove("hidden");
+});
+
+logSaveBtn.addEventListener("click", () => {
+  const watch = {
+    id: nextId++,
+    brand: pendingLogWatch.brand,
+    model: pendingLogWatch.model,
+    movementName: logMovementNameInput.value.trim(),
+    powerReserve: logPowerReserveInput.value.trim(),
+    accuracy: logAccuracyInput.value.trim(),
+    movementType: logMovementTypeInput.value.trim(),
+  };
+
+  addWatchToList(watch, "have");
+
+  logWatchForm.classList.add("hidden");
+  resetLogForm();
+});
+
+// ==============================
+// Wear logging
+// ==============================
 
 logWearBtn.addEventListener("click", () => {
   const selectedId = Number(wearSelect.value);

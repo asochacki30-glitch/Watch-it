@@ -88,14 +88,6 @@ body {
   margin-bottom: 20px;
 }
 
-.section-subhead {
-  font-family: 'Unbounded', sans-serif;
-  font-size: 15px;
-  color: var(--purple-deep);
-  margin-top: 36px;
-  margin-bottom: 12px;
-}
-
 .budget-setting { margin-bottom: 20px; }
 .budget-setting input {
   padding: 8px 12px;
@@ -248,7 +240,7 @@ body {
 
 .add-watch-form button:hover { background: var(--purple-deep); }
 
-/* --- Step-by-step watch logging form --- */
+/* --- Watch logging form --- */
 .primary-btn {
   padding: 10px 20px;
   border: none;
@@ -277,6 +269,9 @@ body {
 .secondary-btn:hover { background: var(--purple-pale); }
 
 .log-watch-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
   background: white;
   border: 1px solid var(--gray-200);
   border-radius: var(--radius);
@@ -285,13 +280,7 @@ body {
   max-width: 420px;
 }
 
-.log-step {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.log-step input {
+.log-watch-form input {
   padding: 10px 14px;
   border: 1px solid var(--gray-200);
   border-radius: 10px;
@@ -303,39 +292,6 @@ body {
   gap: 10px;
   margin-top: 6px;
 }
-
-/* --- Wear log --- */
-.wear-log-form {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 10px;
-}
-
-.wear-log-form select {
-  padding: 10px 14px;
-  border: 1px solid var(--gray-200);
-  border-radius: 10px;
-  font-size: 14px;
-  flex: 1;
-}
-
-.wear-log-form button {
-  padding: 10px 18px;
-  border: none;
-  border-radius: 999px;
-  background: var(--purple);
-  color: white;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.wear-history {
-  font-size: 13px;
-  color: var(--gray-600);
-}
-
-.wear-history p { margin: 4px 0; }
 
 /* --- Watch cards --- */
 .watch-grid {

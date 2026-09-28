@@ -75,45 +75,28 @@
           <div id="wantList" class="watch-grid"></div>
         </section>
 
-        <!-- PAGE: Watch Log -->
+        <!-- PAGE: Watch Log — just the button, the form, and your collection -->
         <section id="page-watchLog" class="page hidden-page">
           <h1>Watch Log</h1>
 
           <button id="startLogWatchBtn" class="primary-btn">Log a Watch</button>
 
           <div id="logWatchForm" class="log-watch-form hidden">
-
-            <div id="logStep1" class="log-step">
-              <input type="text" id="logBrandInput" placeholder="Brand">
-              <input type="text" id="logModelInput" placeholder="Name of the watch">
-              <div class="log-step-actions">
-                <button id="logStep1NextBtn" class="primary-btn">Next</button>
-                <button id="logCancelBtn1" class="secondary-btn">Cancel</button>
-              </div>
+            <input type="text" id="logBrandInput" placeholder="Brand">
+            <input type="text" id="logModelInput" placeholder="Name of the watch">
+            <input type="text" id="logMovementNameInput" placeholder="Movement name">
+            <input type="text" id="logPowerReserveInput" placeholder="Power reserve">
+            <input type="text" id="logAccuracyInput" placeholder="Accuracy">
+            <input type="text" id="logMovementTypeInput" placeholder="Movement type (e.g. Automatic, Quartz)">
+            <input type="text" id="logJewelsInput" placeholder="Jewels">
+            <input type="text" id="logFrequencyInput" placeholder="Frequency (Hz / bph)">
+            <div class="log-step-actions">
+              <button id="logSaveBtn" class="primary-btn">Add to Watch Log</button>
+              <button id="logCancelBtn1" class="secondary-btn">Cancel</button>
             </div>
-
-            <div id="logStep2" class="log-step hidden">
-              <input type="text" id="logMovementNameInput" placeholder="Movement name">
-              <input type="text" id="logPowerReserveInput" placeholder="Power reserve">
-              <input type="text" id="logAccuracyInput" placeholder="Accuracy">
-              <input type="text" id="logMovementTypeInput" placeholder="Movement type (e.g. Automatic, Quartz)">
-              <div class="log-step-actions">
-                <button id="logBackBtn" class="secondary-btn">Back</button>
-                <button id="logSaveBtn" class="primary-btn">Add to Watch Log</button>
-              </div>
-            </div>
-
           </div>
 
           <div id="haveList" class="watch-grid"></div>
-
-          <h3 class="section-subhead">Today's Wear</h3>
-          <div class="wear-log-form">
-            <select id="wearSelect"></select>
-            <button id="logWearBtn">Log Today's Watch</button>
-          </div>
-          <p id="wearLogStatus" class="status-msg"></p>
-          <div id="wearHistory" class="wear-history"></div>
         </section>
 
         <!-- PAGE: Daily Recommendations -->

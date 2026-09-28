@@ -106,7 +106,6 @@ let budget = Number(localStorage.getItem("budget")) || 0;
 let commitment = JSON.parse(localStorage.getItem("commitment")) || null;
 let currentDay = Number(localStorage.getItem("currentDay")) || 0;
 let nextId = Number(localStorage.getItem("nextId")) || 1000;
-let wearLog = JSON.parse(localStorage.getItem("wearLog")) || [];
 
 // ==============================
 // Element references
@@ -149,31 +148,23 @@ const wantPriceInput = document.getElementById("wantPriceInput");
 const wantLinkInput = document.getElementById("wantLinkInput");
 const addWantBtn = document.getElementById("addWantBtn");
 
-const wearSelect = document.getElementById("wearSelect");
-const logWearBtn = document.getElementById("logWearBtn");
-const wearLogStatus = document.getElementById("wearLogStatus");
-const wearHistory = document.getElementById("wearHistory");
-
-// New step-by-step watch logging elements
+// Watch logging
 const startLogWatchBtn = document.getElementById("startLogWatchBtn");
 const logWatchForm = document.getElementById("logWatchForm");
-const logStep1 = document.getElementById("logStep1");
-const logStep2 = document.getElementById("logStep2");
 const logBrandInput = document.getElementById("logBrandInput");
 const logModelInput = document.getElementById("logModelInput");
-const logStep1NextBtn = document.getElementById("logStep1NextBtn");
-const logCancelBtn1 = document.getElementById("logCancelBtn1");
 const logMovementNameInput = document.getElementById("logMovementNameInput");
 const logPowerReserveInput = document.getElementById("logPowerReserveInput");
 const logAccuracyInput = document.getElementById("logAccuracyInput");
 const logMovementTypeInput = document.getElementById("logMovementTypeInput");
-const logBackBtn = document.getElementById("logBackBtn");
+const logJewelsInput = document.getElementById("logJewelsInput");
+const logFrequencyInput = document.getElementById("logFrequencyInput");
+const logCancelBtn1 = document.getElementById("logCancelBtn1");
 const logSaveBtn = document.getElementById("logSaveBtn");
 
 budgetInput.value = budget || "";
 
 let watchBeingCommitted = null;
-let pendingLogWatch = {};
 
 // ==============================
 // Saving
@@ -186,7 +177,6 @@ function saveState() {
   localStorage.setItem("commitment", JSON.stringify(commitment));
   localStorage.setItem("currentDay", currentDay);
   localStorage.setItem("nextId", nextId);
-  localStorage.setItem("wearLog", JSON.stringify(wearLog));
 }
 
 // ==============================
@@ -244,6 +234,8 @@ function renderWatchCard(watch, listType) {
     if (watch.movementName) detailsHtml += `<p class="detail-line">Movement: ${watch.movementName}</p>`;
     if (watch.powerReserve) detailsHtml += `<p class="detail-line">Power reserve: ${watch.powerReserve}</p>`;
     if (watch.accuracy) detailsHtml += `<p class="detail-line">Accuracy: ${watch.accuracy}</p>`;
+    if (watch.jewels) detailsHtml += `<p class="detail-line">Jewels: ${watch.jewels}</p>`;
+    if (watch.frequency) detailsHtml += `<p class="detail-line">Frequency: ${watch.frequency}</p>`;
   }
 
   card.innerHTML = detailsHtml;
@@ -294,7 +286,6 @@ function renderLists() {
   lockedNotice.classList.toggle("hidden", !isLocked());
   renderCommitmentPanel();
   renderDailyRecs();
-  renderWearSection();
 
   dayCounterLabel.textContent = `Day ${currentDay}`;
   addWantBtn.disabled = isLocked();
@@ -338,28 +329,6 @@ function renderDailyRecs() {
   const shuffled = [...sampleWatches].sort(() => Math.random() - 0.5);
   const picks = shuffled.slice(0, 3 + Math.floor(Math.random() * 3));
   picks.forEach((watch) => dailyRecsGrid.appendChild(renderWatchCard(watch, "search")));
-}
-
-function renderWearSection() {
-  wearSelect.innerHTML = "";
-  haveList.forEach((watch) => {
-    const option = document.createElement("option");
-    option.value = watch.id;
-    option.textContent = `${watch.brand} ${watch.model}`;
-    wearSelect.appendChild(option);
-  });
-
-  const todayEntry = wearLog.find((w) => w.day === currentDay);
-  wearLogStatus.textContent = todayEntry
-    ? `Logged today: ${todayEntry.brand} ${todayEntry.model}`
-    : "Nothing logged yet today.";
-
-  wearHistory.innerHTML = "";
-  [...wearLog].reverse().slice(0, 10).forEach((entry) => {
-    const line = document.createElement("p");
-    line.textContent = `Day ${entry.day}: ${entry.brand} ${entry.model}`;
-    wearHistory.appendChild(line);
-  });
 }
 
 // ==============================
@@ -410,7 +379,7 @@ addWantBtn.addEventListener("click", () => {
 });
 
 // ==============================
-// Watch Log — step-by-step logging flow
+// Watch Log — single-screen logging form
 // ==============================
 
 function resetLogForm() {
@@ -420,9 +389,8 @@ function resetLogForm() {
   logPowerReserveInput.value = "";
   logAccuracyInput.value = "";
   logMovementTypeInput.value = "";
-  pendingLogWatch = {};
-  logStep1.classList.remove("hidden");
-  logStep2.classList.add("hidden");
+  logJewelsInput.value = "";
+  logFrequencyInput.value = "";
 }
 
 startLogWatchBtn.addEventListener("click", () => {
@@ -435,51 +403,28 @@ logCancelBtn1.addEventListener("click", () => {
   resetLogForm();
 });
 
-logStep1NextBtn.addEventListener("click", () => {
+logSaveBtn.addEventListener("click", () => {
   const brand = logBrandInput.value.trim();
   const model = logModelInput.value.trim();
+
   if (!brand || !model) return;
 
-  pendingLogWatch = { brand, model };
-  logStep1.classList.add("hidden");
-  logStep2.classList.remove("hidden");
-});
-
-logBackBtn.addEventListener("click", () => {
-  logStep2.classList.add("hidden");
-  logStep1.classList.remove("hidden");
-});
-
-logSaveBtn.addEventListener("click", () => {
   const watch = {
     id: nextId++,
-    brand: pendingLogWatch.brand,
-    model: pendingLogWatch.model,
+    brand,
+    model,
     movementName: logMovementNameInput.value.trim(),
     powerReserve: logPowerReserveInput.value.trim(),
     accuracy: logAccuracyInput.value.trim(),
     movementType: logMovementTypeInput.value.trim(),
+    jewels: logJewelsInput.value.trim(),
+    frequency: logFrequencyInput.value.trim(),
   };
 
   addWatchToList(watch, "have");
 
   logWatchForm.classList.add("hidden");
   resetLogForm();
-});
-
-// ==============================
-// Wear logging
-// ==============================
-
-logWearBtn.addEventListener("click", () => {
-  const selectedId = Number(wearSelect.value);
-  const watch = haveList.find((w) => w.id === selectedId);
-  if (!watch) return;
-
-  wearLog = wearLog.filter((w) => w.day !== currentDay);
-  wearLog.push({ day: currentDay, watchId: watch.id, brand: watch.brand, model: watch.model });
-  saveState();
-  renderWearSection();
 });
 
 // ==============================

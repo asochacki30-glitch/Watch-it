@@ -76,7 +76,7 @@
           <div id="wantList" class="watch-grid"></div>
         </section>
 
-        <!-- PAGE: Add Watch (its own tab now) -->
+        <!-- PAGE: Add Watch -->
         <section id="page-addWatch" class="page hidden-page">
           <h1>Add Watch</h1>
 
@@ -95,22 +95,23 @@
           </div>
         </section>
 
-        <!-- PAGE: Collection (its own tab now) -->
+        <!-- PAGE: Collection -->
         <section id="page-collection" class="page hidden-page">
           <h1>Collection</h1>
           <div id="haveList" class="watch-grid"></div>
         </section>
 
-        <!-- PAGE: Daily Recommendations -->
+        <!-- PAGE: Daily Recommendations — one brand only -->
         <section id="page-dailyRecs" class="page hidden-page">
-          <h1>Daily Recommendations</h1>
-          <p class="page-subtext">A small feed, on purpose — 3 to 5 watches, not an endless scroll.</p>
-          <div id="dailyRecsGrid" class="watch-grid"></div>
+          <h1>Today's Recommendation</h1>
+          <p class="page-subtext">One brand, once a day — not a feed to scroll.</p>
+          <div id="dailyRecLink" class="brand-directory"></div>
         </section>
 
       </main>
     </div>
 
+    <!-- Deposit setup modal -->
     <div id="setupOverlay" class="overlay hidden">
       <div class="overlay-content">
         <p id="setupWatchName"></p>
@@ -122,7 +123,36 @@
       </div>
     </div>
 
-    <!-- Confirmation toast, bottom left -->
+    <!-- Welcome popup, shown on open -->
+    <div id="welcomeOverlay" class="overlay hidden">
+      <div class="overlay-content overlay-large">
+        <button class="modal-close-btn" id="closeWelcomeBtn">&times;</button>
+        <h2>Welcome to Watch-it</h2>
+        <p class="modal-body-text">
+          Watch-it helps you keep track of the watches you want and the ones you already own,
+          without turning it into an endless scroll of new things to want. Search and browse brands
+          on Discover, log a watch you already own on Add Watch, and add something you're after to
+          your Wishlist. If your Wishlist grows past your budget, you'll be asked to commit to saving
+          for one watch at a time before you can add more — this app is built to help you actually get
+          the watch you want, not just keep collecting wishes.
+        </p>
+      </div>
+    </div>
+
+    <!-- One-watch-limit explainer, shown before the deposit setup modal -->
+    <div id="startSavingInfoOverlay" class="overlay hidden">
+      <div class="overlay-content overlay-large">
+        <button class="modal-close-btn" id="closeStartSavingInfoBtn">&times;</button>
+        <h2>One watch at a time</h2>
+        <p class="modal-body-text">
+          Since we want you to actually achieve your goals, you can only save toward one watch at a
+          time. Once you're done here, you can commit to a daily amount and watch your progress build
+          — and once this one is paid off, you're free to start saving for the next.
+        </p>
+      </div>
+    </div>
+
+    <!-- Confirmation toast -->
     <div id="toast" class="toast"></div>
 
     <script src="main.js"></script>

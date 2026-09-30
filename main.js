@@ -32,7 +32,21 @@ function showToast(message) {
 }
 
 // ==============================
-// Brand data (Discover directory + Daily Recs)
+// Welcome modal + Start Saving info modal
+// ==============================
+
+const welcomeOverlay = document.getElementById("welcomeOverlay");
+const closeWelcomeBtn = document.getElementById("closeWelcomeBtn");
+
+const startSavingInfoOverlay = document.getElementById("startSavingInfoOverlay");
+const closeStartSavingInfoBtn = document.getElementById("closeStartSavingInfoBtn");
+
+closeWelcomeBtn.addEventListener("click", () => {
+  welcomeOverlay.classList.add("hidden");
+});
+
+// ==============================
+// Brand data (Discover directory + Daily Recommendation)
 // ==============================
 
 const brands = [
@@ -81,19 +95,6 @@ const brands = [
   { name: "Rolex", url: "https://www.rolex.com/" },
 ];
 
-const sampleWatches = [
-  { id: 1, brand: "Casio", model: "G-Shock DW5600", price: 60 },
-  { id: 2, brand: "Seiko", model: "5 Sports SNK", price: 100 },
-  { id: 3, brand: "Orient", model: "Bambino", price: 150 },
-  { id: 4, brand: "Maen", model: "Hudson", price: 795 },
-  { id: 5, brand: "Baltic", model: "Aquascaphe", price: 650 },
-  { id: 6, brand: "Doxa", model: "Sub 200", price: 1590 },
-  { id: 7, brand: "Tudor", model: "Black Bay 58", price: 3900 },
-  { id: 8, brand: "Rolex", model: "Submariner", price: 10500 },
-  { id: 9, brand: "Christopher Ward", model: "C60 Trident", price: 900 },
-  { id: 10, brand: "Marathon", model: "GSAR Quartz", price: 750 },
-];
-
 // ==============================
 // Discover directory
 // ==============================
@@ -111,6 +112,27 @@ function renderBrandDirectory() {
     link.textContent = brand.name;
     brandDirectory.appendChild(link);
   });
+}
+
+// ==============================
+// Daily Recommendation — one brand, tied to the current day so it
+// stays the same all day and only changes when the day advances
+// ==============================
+
+const dailyRecLinkEl = document.getElementById("dailyRecLink");
+
+function renderDailyRec() {
+  dailyRecLinkEl.innerHTML = "";
+  const index = currentDay % brands.length;
+  const brand = brands[index];
+
+  const link = document.createElement("a");
+  link.className = "brand-name-link";
+  link.href = brand.url;
+  link.target = "_blank";
+  link.rel = "noopener";
+  link.textContent = brand.name;
+  dailyRecLinkEl.appendChild(link);
 }
 
 // ==============================
@@ -156,8 +178,6 @@ const cancelSetupBtn = document.getElementById("cancelSetupBtn");
 
 const nextDayBtn = document.getElementById("nextDayBtn");
 const dayCounterLabel = document.getElementById("dayCounterLabel");
-
-const dailyRecsGrid = document.getElementById("dailyRecsGrid");
 
 const wantBrandInput = document.getElementById("wantBrandInput");
 const wantModelInput = document.getElementById("wantModelInput");
@@ -254,18 +274,7 @@ function renderWatchCard(watch, listType) {
 
   card.innerHTML = detailsHtml;
 
-  if (listType === "search") {
-    const wantBtn = document.createElement("button");
-    wantBtn.textContent = "+ Want";
-    wantBtn.disabled = isLocked();
-    wantBtn.onclick = () => addWatchToList({ ...watch, id: nextId++ }, "want");
-    card.appendChild(wantBtn);
-
-    const haveBtn = document.createElement("button");
-    haveBtn.textContent = "+ Have";
-    haveBtn.onclick = () => addWatchToList({ ...watch, id: nextId++ }, "have");
-    card.appendChild(haveBtn);
-  } else if (listType === "want") {
+  if (listType === "want") {
     const removeBtn = document.createElement("button");
     removeBtn.textContent = "Remove";
     removeBtn.onclick = () => removeFromList(watch.id, "want");
@@ -275,7 +284,7 @@ function renderWatchCard(watch, listType) {
     const commitBtn = document.createElement("button");
     commitBtn.textContent = isThisCommitted ? "Saving for this" : "Start Saving";
     commitBtn.disabled = isThisCommitted || (commitment && commitment.watch && !isThisCommitted);
-    commitBtn.onclick = () => openSetupModal(watch);
+    commitBtn.onclick = () => openStartSavingInfo(watch);
     card.appendChild(commitBtn);
   } else if (listType === "have") {
     const removeBtn = document.createElement("button");
@@ -299,7 +308,7 @@ function renderLists() {
 
   lockedNotice.classList.toggle("hidden", !isLocked());
   renderCommitmentPanel();
-  renderDailyRecs();
+  renderDailyRec();
 
   dayCounterLabel.textContent = `Day ${currentDay}`;
   addWantBtn.disabled = isLocked();
@@ -307,7 +316,7 @@ function renderLists() {
 
 function renderCommitmentPanel() {
   if (!commitment || !commitment.watch) {
-    commitment = null; // self-heal any corrupted/incomplete commitment data
+    commitment = null;
     commitmentPanel.classList.add("hidden");
     if (!isLocked()) setVState(null, "Hey, I'm V. Set a budget and start browsing.");
     return;
@@ -337,13 +346,6 @@ function renderCommitmentPanel() {
     giveUpBtn.classList.add("hidden");
     commitStatusMsg.textContent = "";
   }
-}
-
-function renderDailyRecs() {
-  dailyRecsGrid.innerHTML = "";
-  const shuffled = [...sampleWatches].sort(() => Math.random() - 0.5);
-  const picks = shuffled.slice(0, 3 + Math.floor(Math.random() * 3));
-  picks.forEach((watch) => dailyRecsGrid.appendChild(renderWatchCard(watch, "search")));
 }
 
 // ==============================
@@ -437,7 +439,21 @@ logSaveBtn.addEventListener("click", () => {
 });
 
 // ==============================
-// Commitment / deposit flow
+// Start Saving info popup -> then the real deposit setup modal
+// ==============================
+
+function openStartSavingInfo(watch) {
+  watchBeingCommitted = watch;
+  startSavingInfoOverlay.classList.remove("hidden");
+}
+
+closeStartSavingInfoBtn.addEventListener("click", () => {
+  startSavingInfoOverlay.classList.add("hidden");
+  openSetupModal(watchBeingCommitted);
+});
+
+// ==============================
+// Deposit setup modal
 // ==============================
 
 function openSetupModal(watch) {
@@ -553,3 +569,6 @@ budgetInput.addEventListener("change", (e) => {
 
 renderBrandDirectory();
 renderLists();
+
+// Show the welcome popup every time the app opens
+welcomeOverlay.classList.remove("hidden");

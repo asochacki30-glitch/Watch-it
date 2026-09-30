@@ -199,7 +199,7 @@ function saveState() {
 
 function getUncommittedWantTotal() {
   return wantList
-    .filter((w) => !commitment || w.id !== commitment.watch.id)
+    .filter((w) => !commitment || !commitment.watch || w.id !== commitment.watch.id)
     .reduce((sum, w) => sum + w.price, 0);
 }
 
@@ -271,10 +271,10 @@ function renderWatchCard(watch, listType) {
     removeBtn.onclick = () => removeFromList(watch.id, "want");
     card.appendChild(removeBtn);
 
-    const isThisCommitted = commitment && commitment.watch.id === watch.id;
+    const isThisCommitted = commitment && commitment.watch && commitment.watch.id === watch.id;
     const commitBtn = document.createElement("button");
     commitBtn.textContent = isThisCommitted ? "Saving for this" : "Start Saving";
-    commitBtn.disabled = isThisCommitted || (commitment && !isThisCommitted);
+    commitBtn.disabled = isThisCommitted || (commitment && commitment.watch && !isThisCommitted);
     commitBtn.onclick = () => openSetupModal(watch);
     card.appendChild(commitBtn);
   } else if (listType === "have") {
@@ -306,7 +306,8 @@ function renderLists() {
 }
 
 function renderCommitmentPanel() {
-  if (!commitment) {
+  if (!commitment || !commitment.watch) {
+    commitment = null; // self-heal any corrupted/incomplete commitment data
     commitmentPanel.classList.add("hidden");
     if (!isLocked()) setVState(null, "Hey, I'm V. Set a budget and start browsing.");
     return;
@@ -363,7 +364,7 @@ function addWatchToList(watch, listType) {
 function removeFromList(id, listType) {
   if (listType === "want") {
     wantList = wantList.filter((w) => w.id !== id);
-    if (commitment && commitment.watch.id === id) commitment = null;
+    if (commitment && commitment.watch && commitment.watch.id === id) commitment = null;
   } else {
     haveList = haveList.filter((w) => w.id !== id);
   }

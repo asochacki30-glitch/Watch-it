@@ -240,7 +240,7 @@ body {
 
 .add-watch-form button:hover { background: var(--purple-deep); }
 
-/* --- Watch logging form --- */
+/* --- Add Watch page form --- */
 .primary-btn {
   padding: 10px 20px;
   border: none;
@@ -338,7 +338,7 @@ body {
 
 .learn-more:hover { text-decoration: underline; }
 
-/* --- Overlay --- */
+/* --- Overlay (deposit setup modal) --- */
 .overlay {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
@@ -395,4 +395,28 @@ body {
   border-top: 1px dashed var(--gray-200);
   font-size: 12px;
   color: var(--gray-600);
+}
+
+/* --- Toast confirmation --- */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  left: 24px;
+  background: var(--purple-deep);
+  color: white;
+  padding: 12px 20px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.2);
+  opacity: 0;
+  transform: translateY(10px);
+  pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  z-index: 200;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateY(0);
 }

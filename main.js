@@ -15,6 +15,23 @@ navButtons.forEach((btn) => {
 });
 
 // ==============================
+// Toast confirmation
+// ==============================
+
+const toastEl = document.getElementById("toast");
+let toastTimer = null;
+
+function showToast(message) {
+  toastEl.textContent = message;
+  toastEl.classList.add("show");
+
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => {
+    toastEl.classList.remove("show");
+  }, 4000);
+}
+
+// ==============================
 // Brand data (Discover directory + Daily Recs)
 // ==============================
 
@@ -148,9 +165,7 @@ const wantPriceInput = document.getElementById("wantPriceInput");
 const wantLinkInput = document.getElementById("wantLinkInput");
 const addWantBtn = document.getElementById("addWantBtn");
 
-// Watch logging
-const startLogWatchBtn = document.getElementById("startLogWatchBtn");
-const logWatchForm = document.getElementById("logWatchForm");
+// Add Watch page
 const logBrandInput = document.getElementById("logBrandInput");
 const logModelInput = document.getElementById("logModelInput");
 const logMovementNameInput = document.getElementById("logMovementNameInput");
@@ -159,7 +174,6 @@ const logAccuracyInput = document.getElementById("logAccuracyInput");
 const logMovementTypeInput = document.getElementById("logMovementTypeInput");
 const logJewelsInput = document.getElementById("logJewelsInput");
 const logFrequencyInput = document.getElementById("logFrequencyInput");
-const logCancelBtn1 = document.getElementById("logCancelBtn1");
 const logSaveBtn = document.getElementById("logSaveBtn");
 
 budgetInput.value = budget || "";
@@ -376,10 +390,12 @@ addWantBtn.addEventListener("click", () => {
   wantModelInput.value = "";
   wantPriceInput.value = "";
   wantLinkInput.value = "";
+
+  showToast("Added to Wishlist");
 });
 
 // ==============================
-// Watch Log — single-screen logging form
+// Add Watch page
 // ==============================
 
 function resetLogForm() {
@@ -393,21 +409,14 @@ function resetLogForm() {
   logFrequencyInput.value = "";
 }
 
-startLogWatchBtn.addEventListener("click", () => {
-  resetLogForm();
-  logWatchForm.classList.remove("hidden");
-});
-
-logCancelBtn1.addEventListener("click", () => {
-  logWatchForm.classList.add("hidden");
-  resetLogForm();
-});
-
 logSaveBtn.addEventListener("click", () => {
   const brand = logBrandInput.value.trim();
   const model = logModelInput.value.trim();
 
-  if (!brand || !model) return;
+  if (!brand || !model) {
+    showToast("Add a brand and name first");
+    return;
+  }
 
   const watch = {
     id: nextId++,
@@ -422,9 +431,8 @@ logSaveBtn.addEventListener("click", () => {
   };
 
   addWatchToList(watch, "have");
-
-  logWatchForm.classList.add("hidden");
   resetLogForm();
+  showToast("Watch added");
 });
 
 // ==============================

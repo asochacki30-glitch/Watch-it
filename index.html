@@ -14,7 +14,8 @@
         <button class="nav-btn active" data-page="controlPanel">Control Panel</button>
         <button class="nav-btn" data-page="watchSearch">Discover</button>
         <button class="nav-btn" data-page="wishlist">Wishlist</button>
-        <button class="nav-btn" data-page="watchLog">Watch Log</button>
+        <button class="nav-btn" data-page="addWatch">Add Watch</button>
+        <button class="nav-btn" data-page="collection">Collection</button>
         <button class="nav-btn" data-page="dailyRecs">Daily Recommendations</button>
       </nav>
 
@@ -53,7 +54,7 @@
           </div>
         </section>
 
-        <!-- PAGE: Discover — just names -->
+        <!-- PAGE: Discover -->
         <section id="page-watchSearch" class="page hidden-page">
           <h1>Discover</h1>
           <p class="page-subtext">Click a brand to visit their site.</p>
@@ -75,13 +76,11 @@
           <div id="wantList" class="watch-grid"></div>
         </section>
 
-        <!-- PAGE: Watch Log — just the button, the form, and your collection -->
-        <section id="page-watchLog" class="page hidden-page">
-          <h1>Watch Log</h1>
+        <!-- PAGE: Add Watch (its own tab now) -->
+        <section id="page-addWatch" class="page hidden-page">
+          <h1>Add Watch</h1>
 
-          <button id="startLogWatchBtn" class="primary-btn">Log a Watch</button>
-
-          <div id="logWatchForm" class="log-watch-form hidden">
+          <div id="logWatchForm" class="log-watch-form">
             <input type="text" id="logBrandInput" placeholder="Brand">
             <input type="text" id="logModelInput" placeholder="Name of the watch">
             <input type="text" id="logMovementNameInput" placeholder="Movement name">
@@ -92,10 +91,13 @@
             <input type="text" id="logFrequencyInput" placeholder="Frequency (Hz / bph)">
             <div class="log-step-actions">
               <button id="logSaveBtn" class="primary-btn">Add to Watch Log</button>
-              <button id="logCancelBtn1" class="secondary-btn">Cancel</button>
             </div>
           </div>
+        </section>
 
+        <!-- PAGE: Collection (its own tab now) -->
+        <section id="page-collection" class="page hidden-page">
+          <h1>Collection</h1>
           <div id="haveList" class="watch-grid"></div>
         </section>
 
@@ -119,6 +121,9 @@
         <button id="cancelSetupBtn">Cancel</button>
       </div>
     </div>
+
+    <!-- Confirmation toast, bottom left -->
+    <div id="toast" class="toast"></div>
 
     <script src="main.js"></script>
   </body>
